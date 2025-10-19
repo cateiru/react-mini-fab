@@ -13,7 +13,11 @@ type FloatingActionButtonProps = {
 export const FloatingActionButton = (props: FloatingActionButtonProps) => {
   return (
     <div>
-      <button aria-label={props.ariaLabel} onClick={props.onClick}></button>
+      <button
+        aria-label={props.ariaLabel}
+        onClick={props.onClick}
+        type="button"
+      ></button>
     </div>
   );
 };
