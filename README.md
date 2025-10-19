@@ -1,1 +1,5 @@
-# react-help-window
+# React HELP Window
+
+## LICENSE
+
+[MIT](./LICENSE)
