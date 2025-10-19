@@ -19,7 +19,9 @@
     "build": "vite build",
     "lint": "biome lint .",
     "format": "biome format --write .",
-    "check": "biome check --write ."
+    "check": "biome check --write .",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -31,12 +33,16 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",
+    "@storybook/addon-essentials": "9.0.0-alpha.12",
+    "@storybook/addon-links": "9.1.13",
+    "@storybook/react-vite": "9.1.13",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "postcss-nested": "^7.0.2",
+    "storybook": "9.1.13",
     "typescript": "~5.9.2",
     "vite": "^7.1.5",
     "vite-plugin-dts": "^4.5.4"
