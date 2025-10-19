@@ -1,8 +1,10 @@
+import styles from "./HelloWorld.module.css";
+
 export function HelloWorld() {
   return (
-    <div>
-      <h1>Hello, World!</h1>
-      <p>React Help Window へようこそ</p>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Hello, World!</h1>
+      <p className={styles.description}>React Help Window へようこそ</p>
     </div>
   );
 }
