@@ -15,11 +15,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Left: Story = {
+export const IconLeft: Story = {
+  name: "Icon Left",
   args: {
     ariaLabel: "FloatingActionButton",
     title: "Floating Action Button",
     backgroundColor: "red",
+    position: "left",
+    isHide: true
   },
   render: (args) => {
     const [hided, setHidden] = useState(false);
@@ -42,7 +45,8 @@ export const Left: Story = {
   },
 };
 
-export const Right: Story = {
+export const IconRight: Story = {
+  name: "Icon Right",
   args: {
     ariaLabel: "FloatingActionButton",
     title: "Floating Action Button",
@@ -67,5 +71,15 @@ export const Right: Story = {
         </FloatingActionButton>
       </>
     );
+  },
+};
+
+export const TextLeft: Story = {
+  name: "Text",
+  args: {
+    ariaLabel: "FloatingActionButton",
+    title: "Floating Action Button",
+    backgroundColor: "green",
+    children: <p style={{ color: "#fff" }}>Text Hello World</p>,
   },
 };

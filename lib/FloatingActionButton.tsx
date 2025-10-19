@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./FloatingActionButton.module.css";
 import { classNames } from "./utils/classNames";
 import { Draggable } from "./utils/Dragable";
@@ -17,13 +17,22 @@ type FloatingActionButtonProps = {
 
 export const FloatingActionButton = (props: FloatingActionButtonProps) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [initializeHide, setInitializeHide] = useState(true);
+
+  useEffect(() => {
+    if (initializeHide) {
+      setTimeout(() => {
+        setInitializeHide(false);
+      }, 100);
+    }
+  }, [initializeHide]);
 
   return (
     <div
       ref={ref}
       className={classNames(
         styles["floating-action-button-wrapper"],
-        props.isHide ? styles.hide : undefined,
+        props.isHide || initializeHide ? styles.hide : undefined,
         props.position === "right" ? styles.right : styles.left,
       )}
     >
