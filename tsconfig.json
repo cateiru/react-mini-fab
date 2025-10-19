@@ -14,6 +14,11 @@
     "moduleDetection": "force",
     "noEmit": true,
 
+    /* Declaration */
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
@@ -21,4 +26,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
+  "include": ["lib"]
 }
