@@ -1,44 +1,44 @@
 {
-  "name": "react-help-window",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.umd.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.js",
-    "require": "./dist/index.umd.cjs"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "biome lint .",
-    "format": "biome format --write .",
-    "check": "biome check --write ."
-  },
-  "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
-  },
-  "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.2.6",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "@vitejs/plugin-react": "^5.0.4",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "postcss-nested": "^7.0.2",
-    "typescript": "~5.9.2",
-    "vite": "^7.1.5",
-    "vite-plugin-dts": "^4.5.4"
-  }
+	"name": "react-help-window",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"main": "./dist/index.umd.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		"types": "./dist/index.d.ts",
+		"import": "./dist/index.js",
+		"require": "./dist/index.umd.cjs"
+	},
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"lint": "biome lint .",
+		"format": "biome format --write .",
+		"check": "biome check --write ."
+	},
+	"peerDependencies": {
+		"react": "^18.0.0 || ^19.0.0",
+		"react-dom": "^18.0.0 || ^19.0.0"
+	},
+	"dependencies": {
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.2.6",
+		"@types/react": "^19.2.2",
+		"@types/react-dom": "^19.2.2",
+		"@vitejs/plugin-react": "^5.0.4",
+		"autoprefixer": "^10.4.21",
+		"postcss": "^8.5.6",
+		"postcss-nested": "^7.0.2",
+		"typescript": "~5.9.2",
+		"vite": "^7.1.5",
+		"vite-plugin-dts": "^4.5.4"
+	}
 }
