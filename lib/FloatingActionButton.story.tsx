@@ -74,6 +74,37 @@ export const IconRight: Story = {
   },
 };
 
+export const SwitchablePosition: Story = {
+  name: "Switchable Position",
+  args: {
+    ariaLabel: "FloatingActionButton",
+    title: "Floating Action Button",
+    backgroundColor: "blue",
+  },
+  render: (args) => {
+    const [position, setPosition] = useState<"left" | "right">("right");
+
+    return (
+      <>
+        <button
+          type="button"
+          onClick={() => setPosition(position === "right" ? "left" : "right")}
+        >
+          Toggle FAB Position
+        </button>
+        <FloatingActionButton {...args} position={position}>
+          <img
+            src={Accessibility}
+            alt="accessibility icon"
+            width="20px"
+            height="20px"
+          />
+        </FloatingActionButton>
+      </>
+    );
+  },
+};
+
 export const TextLeft: Story = {
   name: "Text",
   args: {

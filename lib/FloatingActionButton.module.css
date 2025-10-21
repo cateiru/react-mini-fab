@@ -37,7 +37,9 @@
     }
   }
 
-  transition: transform 0.1s ease;
+  &.hide-animation {
+    transition: transform 0.1s ease;
+  }
   &.hide {
     pointer-events: none;
   }
