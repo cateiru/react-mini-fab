@@ -1,10 +1,38 @@
 import { useEffect, useRef, useState } from "react";
 
+/**
+ * Props for the Draggable component
+ */
 type DraggableProps = {
+  /** Reference to the HTML element that should be made draggable */
   targetRef: React.RefObject<HTMLElement | null>;
+  /** Optional unique identifier for saving/loading position from localStorage */
   draggableId?: string;
 };
 
+/**
+ * A component that makes a target element draggable vertically.
+ * The element's position is saved to localStorage if a draggableId is provided.
+ * The position is automatically clamped to prevent the element from being dragged beyond the screen bounds.
+ *
+ * @param props - Component props
+ * @returns null (this component renders nothing visible)
+ *
+ * @example
+ *
+ * ```tsx
+ * const MyComponent = () => {
+ *   const elementRef = useRef<HTMLDivElement>(null);
+ *
+ *   return (
+ *     <>
+ *       <div ref={elementRef}>Drag me!</div>
+ *       <Draggable targetRef={elementRef} draggableId="my-element" />
+ *     </>
+ *   );
+ * };
+ * ```
+ */
 export const Draggable = (props: DraggableProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ y: 0 });

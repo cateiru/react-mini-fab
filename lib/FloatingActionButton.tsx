@@ -64,6 +64,36 @@ type Badge = {
   color: string;
 };
 
+/**
+ * A floating action button component that can be positioned on either side of the screen
+ * and supports dragging, badges, and smooth animations.
+ *
+ * Features:
+ * - Vertically draggable with position persistence (when draggableId is provided)
+ * - Smooth show/hide animations
+ * - Animated position switching between left and right
+ * - Optional badge indicator
+ * - Customizable colors and accessibility labels
+ *
+ * @param props - Component props
+ * @returns A floating action button element
+ *
+ * @example
+ *
+ * ```tsx
+ * <FloatingActionButton
+ *   onClick={() => console.log('Clicked!')}
+ *   position="right"
+ *   title="Help"
+ *   ariaLabel="Open help window"
+ *   backgroundColor="#007bff"
+ *   draggableId="help-button"
+ *   badge={{ color: '#ff0000' }}
+ * >
+ *   <HelpIcon />
+ * </FloatingActionButton>
+ * ```
+ */
 export const FloatingActionButton = (props: FloatingActionButtonProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [initializeHide, setInitializeHide] = useState(true);
