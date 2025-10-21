@@ -26,26 +26,37 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
   );
 
   useEffect(() => {
+    const timers: NodeJS.Timeout[] = [];
+
     // initial animation
     if (initializeHide) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setInitializeHide(false);
       }, 100);
+      timers.push(timer);
     }
     // switch position animation
     if (props.position !== position) {
       setOverrideHide(true);
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setHideAnimation(false);
         setPosition(props.position ?? "right");
 
         // reset override after animation
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           setHideAnimation(true);
           setOverrideHide(false);
         }, 100);
+        timers.push(timer);
       }, 100);
+      timers.push(timer);
     }
+
+    return () => {
+      for (const timer of timers) {
+        clearTimeout(timer);
+      }
+    };
   }, [initializeHide, position, props.position]);
 
   const isHide = useMemo(() => {

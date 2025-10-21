@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Accessibility from "../public/accessibility.svg";
 import Construct from "../public/construct.svg";
 import { FloatingActionButton } from "./FloatingActionButton";
@@ -28,13 +28,28 @@ export const IconLeft: Story = {
   },
   render: (args) => {
     const [hided, setHidden] = useState(false);
+    const [clicked, setClicked] = useState(false);
+
+    useEffect(() => {
+      if (clicked) {
+        const timer = setTimeout(() => {
+          setClicked(false);
+        }, 1000);
+        return () => clearTimeout(timer);
+      }
+    }, [clicked]);
 
     return (
       <>
+        <p>Clicked: {clicked ? "Yes" : "No"}</p>
         <button type="button" onClick={() => setHidden(!hided)}>
           Toggle FAB
         </button>
-        <FloatingActionButton {...args} isHide={hided}>
+        <FloatingActionButton
+          {...args}
+          isHide={hided}
+          onClick={() => setClicked(true)}
+        >
           <img
             src={Accessibility}
             alt="accessibility icon"
