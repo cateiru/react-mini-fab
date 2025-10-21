@@ -1,8 +1,23 @@
 {
   "name": "react-mini-fab",
-  "private": true,
+  "description": "A lightweight and customizable Mini Floating Action Button (Mini FAB) component for React applications. This component provides an easy way to add a floating action button to your UI, enhancing user interaction and accessibility.",
   "version": "1.0.0",
   "type": "module",
+  "keywords": [
+    "react",
+    "fab",
+    "floating action button",
+    "mini button"
+  ],
+  "author": {
+    "name": "cateiru",
+    "email": "git@cateiru.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cateiru/react-mini-fab.git"
+  },
+  "license": "MIT",
   "files": [
     "dist"
   ],
