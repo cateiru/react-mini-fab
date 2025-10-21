@@ -3,22 +3,64 @@ import styles from "./FloatingActionButton.module.css";
 import { classNames } from "./utils/classNames";
 import { Draggable } from "./utils/Dragable";
 
+/**
+ * Props for the FloatingActionButton component.
+ */
 type FloatingActionButtonProps = {
+  /**
+   * Callback function invoked when the button is clicked.
+   */
   onClick?: () => void;
+
+  /**
+   * Controls the visibility of the button. When `true`, the button is hidden.
+   */
   isHide?: boolean;
 
+  /**
+   * Tooltip text displayed when hovering over the button.
+   */
   title?: string;
+
+  /**
+   * Accessibility label for screen readers.
+   */
   ariaLabel?: string;
+
+  /**
+   * Background color of the button.
+   */
   backgroundColor?: string;
-  position?: "left" | "right"; // default: left
+
+  /**
+   * Position of the button on the screen.
+   * @default "left"
+   */
+  position?: "left" | "right";
+
+  /**
+   * Unique identifier for the draggable functionality.
+   */
   draggableId?: string;
 
+  /**
+   * Badge configuration to display on the button.
+   */
   badge?: Badge;
 
+  /**
+   * Content to be rendered inside the button (typically an icon).
+   */
   children?: React.ReactNode;
 };
 
+/**
+ * Configuration for the badge displayed on the FloatingActionButton.
+ */
 type Badge = {
+  /**
+   * Background color of the badge.
+   */
   color: string;
 };
 
@@ -99,7 +141,8 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
         title={props.title}
         aria-label={props.ariaLabel}
         onClick={() => {
-          if (props.isHide) return;
+          // if hidden, do nothing
+          if (isHide) return;
           props.onClick?.();
         }}
         type="button"
