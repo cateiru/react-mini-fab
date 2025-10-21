@@ -19,6 +19,10 @@
 
     .floating-action-button-icon {
       pointer-events: none;
+
+      img {
+        vertical-align: bottom;
+      }
     }
     /* クリック時に背景色を暗くする */
     &:active {

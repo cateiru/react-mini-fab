@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
 import Accessibility from "../public/accessibility.svg";
+import Construct from "../public/construct.svg";
 import { FloatingActionButton } from "./FloatingActionButton";
 
 const meta = {
@@ -81,7 +82,7 @@ export const SwitchablePosition: Story = {
   args: {
     ariaLabel: "FloatingActionButton",
     title: "Floating Action Button",
-    backgroundColor: "blue",
+    backgroundColor: "purple",
     draggableId: "fab-3",
   },
   render: (args) => {
@@ -97,7 +98,7 @@ export const SwitchablePosition: Story = {
         </button>
         <FloatingActionButton {...args} position={position}>
           <img
-            src={Accessibility}
+            src={Construct}
             alt="accessibility icon"
             width="20px"
             height="20px"
