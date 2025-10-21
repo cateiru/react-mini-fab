@@ -27,6 +27,7 @@ export const Draggable = (props: DraggableProps) => {
         y: e.clientY,
       };
 
+      element.dataset.dragging = "true";
       setIsDragging(true);
     };
 
@@ -40,6 +41,9 @@ export const Draggable = (props: DraggableProps) => {
     };
 
     const handleMouseUp = () => {
+      if (element) {
+        delete element.dataset.dragging;
+      }
       setIsDragging(false);
     };
 
