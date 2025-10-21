@@ -1,7 +1,7 @@
 .floating-action-button-wrapper {
   position: fixed;
   top: 70%;
-  z-index: calc(Infinity - 1);
+  z-index: calc(Infinity - 2);
 
   .floating-action-button {
     min-width: 40px;
@@ -37,8 +37,19 @@
         background-color: rgba(0, 0, 0, 0.2);
         border-radius: inherit;
         pointer-events: none;
+        z-index: 2;
       }
     }
+  }
+  .floating-action-button-badge {
+    position: absolute;
+    top: -5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    pointer-events: none;
+    z-index: 3;
   }
 
   &.hide-animation {
@@ -67,6 +78,9 @@
         padding-left: 20px;
       }
     }
+    .floating-action-button-badge {
+      right: -5px;
+    }
   }
   &.right {
     right: 0px;
@@ -86,6 +100,9 @@
       .floating-action-button {
         padding-right: 20px;
       }
+    }
+    .floating-action-button-badge {
+      left: -5px;
     }
   }
 }

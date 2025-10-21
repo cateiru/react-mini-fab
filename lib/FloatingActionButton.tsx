@@ -13,7 +13,13 @@ type FloatingActionButtonProps = {
   position?: "left" | "right"; // default: left
   draggableId?: string;
 
+  badge?: Badge;
+
   children?: React.ReactNode;
+};
+
+type Badge = {
+  color: string;
 };
 
 export const FloatingActionButton = (props: FloatingActionButtonProps) => {
@@ -83,6 +89,12 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
       )}
     >
       <Draggable targetRef={ref} draggableId={props.draggableId} />
+      {props.badge && (
+        <span
+          className={classNames(styles["floating-action-button-badge"])}
+          style={{ backgroundColor: props.badge.color }}
+        />
+      )}
       <button
         title={props.title}
         aria-label={props.ariaLabel}

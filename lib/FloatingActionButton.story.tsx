@@ -134,3 +134,36 @@ export const TextLeft: Story = {
     children: <p style={{ color: "#fff" }}>Text Hello World</p>,
   },
 };
+
+export const Badge: Story = {
+  name: "Badge",
+  args: {
+    ariaLabel: "FloatingActionButton",
+    title: "Floating Action Button",
+    backgroundColor: "orange",
+    position: "left",
+    draggableId: "fab-5",
+    badge: { color: "red" },
+    children: (
+      <img
+        src={Construct}
+        alt="accessibility icon"
+        width="20px"
+        height="20px"
+      />
+    ),
+  },
+};
+
+export const BadgeWithText: Story = {
+  name: "Badge With Text",
+  args: {
+    ariaLabel: "FloatingActionButton",
+    title: "Floating Action Button",
+    backgroundColor: "#b02883",
+    position: "left",
+    draggableId: "fab-5",
+    badge: { color: "#4a26ff" },
+    children: <p style={{ color: "#fff" }}>Text Hello World</p>,
+  },
+};
