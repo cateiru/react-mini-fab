@@ -3,7 +3,21 @@ import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  plugins: [react(), dts({ insertTypesEntry: true })],
+  plugins: [
+    react(),
+    dts({
+      insertTypesEntry: true,
+      exclude: [
+        "**/*.story.tsx",
+        "**/*.stories.tsx",
+        "**/*.test.tsx",
+        "**/*.test.ts",
+        "**/*.spec.tsx",
+        "**/*.spec.ts",
+      ],
+    }),
+  ],
+  publicDir: false,
   build: {
     lib: {
       entry: "./lib/main.tsx",
