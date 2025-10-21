@@ -1,7 +1,7 @@
 import { fireEvent, render } from "@testing-library/react";
 import { useRef } from "react";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
-import { Draggable } from "./Dragable";
+import { Draggable } from "./Draggable";
 
 // Test wrapper component
 const DraggableWrapper = () => {

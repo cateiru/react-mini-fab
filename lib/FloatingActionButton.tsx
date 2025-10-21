@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./FloatingActionButton.module.css";
 import { classNames } from "./utils/classNames";
-import { Draggable } from "./utils/Dragable";
+import { Draggable } from "./utils/Draggable";
 
 /**
  * Props for the FloatingActionButton component.
