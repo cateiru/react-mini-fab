@@ -9,6 +9,7 @@ react-help-window は React 向けの UI コンポーネントライブラリで
 ## 開発コマンド
 
 ### ビルド
+
 ```bash
 # ライブラリをビルド
 pnpm run build
@@ -18,6 +19,7 @@ pnpm run dev
 ```
 
 ### コード品質
+
 ```bash
 # Biome でリント
 pnpm run lint
@@ -35,13 +37,27 @@ pnpm run format:write
 pnpm run check:write
 ```
 
+### テスト
+
+```bash
+# テストを実行
+pnpm run test
+
+# テストを UI モードで実行
+pnpm run test:ui
+
+# カバレッジ付きでテストを実行
+pnpm run test:coverage
+```
+
 ### Storybook
+
 ```bash
 # Storybook 開発サーバーを起動（ポート 6006）
-pnpm run storybook
+pnpm run dev:storybook
 
 # Storybook をビルド
-pnpm run build-storybook
+pnpm run build:storybook
 ```
 
 ## アーキテクチャ
