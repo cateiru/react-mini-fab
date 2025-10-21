@@ -1,0 +1,33 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "rangeStrategy": "bump",
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "groupName": "devDependencies (non-major)",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "groupName": "React",
+      "matchPackageNames": ["react", "react-dom"],
+      "matchPackagePatterns": ["@types/react"],
+      "schedule": ["before 3am on Monday"]
+    }
+  ],
+  "schedule": ["before 3am on Monday"],
+  "timezone": "Asia/Tokyo",
+  "labels": ["dependencies"],
+  "semanticCommits": "disabled",
+  "commitMessagePrefix": "chore:",
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 10
+}
