@@ -14,6 +14,7 @@ export type MiniFABProps = {
 
   /**
    * Controls the visibility of the button. When `true`, the button is hidden.
+   * @default false
    */
   isHide?: boolean;
 
@@ -25,12 +26,12 @@ export type MiniFABProps = {
   /**
    * Accessibility label for screen readers.
    */
-  ariaLabel?: string;
+  ariaLabel: string;
 
   /**
    * Background color of the button.
    */
-  backgroundColor?: string;
+  backgroundColor: string;
 
   /**
    * Position of the button on the screen.
@@ -45,8 +46,15 @@ export type MiniFABProps = {
 
   /**
    * Badge configuration to display on the button.
+   * @default undefined
    */
   badge?: Badge;
+
+  /**
+   * Whether to include fixed class names for styling purposes.
+   * @default false
+   */
+  includeFixedClassName?: boolean;
 
   /**
    * Content to be rendered inside the button (typically an icon).
@@ -158,12 +166,16 @@ export const MiniFAB = (props: MiniFABProps) => {
         isHide ? styles.hide : undefined,
         position === "right" ? styles.right : styles.left,
         hideAnimation ? styles["hide-animation"] : undefined,
+        props.includeFixedClassName ? "mini-fab-wrapper" : undefined,
       )}
     >
       <Draggable targetRef={ref} draggableId={props.draggableId} />
       {props.badge && (
         <span
-          className={classNames(styles["floating-action-button-badge"])}
+          className={classNames(
+            styles["floating-action-button-badge"],
+            props.includeFixedClassName ? "mini-fab-badge" : undefined,
+          )}
           style={{ backgroundColor: props.badge.color }}
         />
       )}
@@ -176,12 +188,20 @@ export const MiniFAB = (props: MiniFABProps) => {
           props.onClick?.();
         }}
         type="button"
-        className={classNames(styles["floating-action-button"])}
+        className={classNames(
+          styles["floating-action-button"],
+          props.includeFixedClassName ? "mini-fab-button" : undefined,
+        )}
         style={{
           backgroundColor: props.backgroundColor,
         }}
       >
-        <span className={classNames(styles["floating-action-button-icon"])}>
+        <span
+          className={classNames(
+            styles["floating-action-button-icon"],
+            props.includeFixedClassName ? "mini-fab-icon" : undefined,
+          )}
+        >
           {props.children}
         </span>
       </button>
