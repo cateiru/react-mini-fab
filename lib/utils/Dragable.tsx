@@ -21,7 +21,17 @@ export const Draggable = (props: DraggableProps) => {
     if (savedPosition) {
       try {
         const { y } = JSON.parse(savedPosition);
-        element.style.top = `${y}px`;
+
+        // yが画面の最大値を超えている場合は制限
+        const maxY = window.innerHeight - element.offsetHeight;
+        const clampedY = Math.min(y, maxY);
+
+        element.style.top = `${clampedY}px`;
+
+        // 制限した値をLocalStorageに再保存
+        if (clampedY !== y) {
+          localStorage.setItem(storageKey, JSON.stringify({ y: clampedY }));
+        }
       } catch (error) {
         console.error("Failed to parse saved position:", error);
       }
@@ -56,7 +66,11 @@ export const Draggable = (props: DraggableProps) => {
       const deltaY = e.clientY - dragStartRef.current.y;
       const newTop = initialPositionRef.current.y + deltaY;
 
-      element.style.top = `${newTop}px`;
+      // yが画面の最大値を超えている場合は制限
+      const maxY = window.innerHeight - element.offsetHeight;
+      const clampedTop = Math.min(newTop, maxY);
+
+      element.style.top = `${clampedTop}px`;
     };
 
     const handleMouseUp = () => {
