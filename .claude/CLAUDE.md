@@ -22,11 +22,26 @@ pnpm run dev
 # Biome でリント
 pnpm run lint
 
+# Biome でリント（自動修正付き）
+pnpm run lint:write
+
 # Biome でフォーマット
 pnpm run format
 
+# Biome でフォーマット（自動修正付き）
+pnpm run format:write
+
 # Biome でリントとフォーマットを同時に実行（自動修正付き）
-pnpm run check
+pnpm run check:write
+```
+
+### Storybook
+```bash
+# Storybook 開発サーバーを起動（ポート 6006）
+pnpm run storybook
+
+# Storybook をビルド
+pnpm run build-storybook
 ```
 
 ## アーキテクチャ
@@ -34,10 +49,20 @@ pnpm run check
 ### ディレクトリ構造
 
 - `lib/` - ライブラリのソースコード（TypeScript/React）
-  - `main.tsx` - エントリーポイント
-  - `utils/` - ユーティリティ関数
+  - `main.tsx` - エントリーポイント（コンポーネントを export する）
+  - `*.tsx` - React コンポーネント
+  - `*.story.tsx` - Storybook のストーリーファイル（コンポーネントと同じディレクトリに配置）
   - `*.module.css` - CSS Modules（PostCSS で処理される）
+  - `utils/` - ユーティリティ関数とコンポーネント
 - `dist/` - ビルド成果物（UMD と ES モジュール）
+- `.storybook/` - Storybook の設定
+
+### パッケージ配布
+
+- **UMD 形式**: `dist/index.umd.cjs`（CommonJS、グローバル変数として `react-help-window` を提供）
+- **ES モジュール形式**: `dist/index.js`
+- **型定義ファイル**: `dist/index.d.ts`（vite-plugin-dts により自動生成）
+- **ピア依存関係**: React 18.x または 19.x
 
 ### ビルド設定
 
@@ -51,3 +76,4 @@ pnpm run check
 - **フォーマッター**: Biome（インデント: スペース、クォート: ダブル）
 - **TypeScript**: `lib/` 配下のみをコンパイル対象とする
 - **インポート**: Biome が自動的にインポートを整理
+- **Storybook**: コンポーネントのストーリーは `*.story.tsx` という命名規則で、コンポーネントファイルと同じディレクトリに配置する
