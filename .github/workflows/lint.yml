@@ -29,6 +29,9 @@ jobs:
       - name: Run lint with Biome
         run: pnpm run check
 
+      - name: Run tests with Vitest
+        run: pnpm run test
+
       - name: TypeScript type check
         run: pnpm exec tsc --noEmit
 
