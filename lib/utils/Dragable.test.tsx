@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { Draggable } from "./Dragable";
 
-// テスト用のラッパーコンポーネント
+// Test wrapper component
 const DraggableWrapper = () => {
   const targetRef = useRef<HTMLDivElement>(null);
 
@@ -28,18 +28,18 @@ const DraggableWrapper = () => {
 };
 
 describe("Draggable", () => {
-  test("コンポーネントが正常にレンダリングされる", () => {
+  test("renders the component successfully", () => {
     const { container } = render(<DraggableWrapper />);
     expect(container).toBeTruthy();
   });
 
-  test("null を返す", () => {
+  test("returns null", () => {
     const targetRef = { current: null };
     const { container } = render(<Draggable targetRef={targetRef} />);
     expect(container.firstChild).toBeNull();
   });
 
-  test("mousedown イベントでドラッグが開始される", () => {
+  test("starts dragging on mousedown event", () => {
     const { getByTestId } = render(<DraggableWrapper />);
     const element = getByTestId("draggable-element");
 
@@ -48,76 +48,76 @@ describe("Draggable", () => {
     expect(element.dataset.dragging).toBe("true");
   });
 
-  test("mousemove イベントで要素が移動する", () => {
+  test("moves the element on mousemove event", () => {
     const { getByTestId } = render(<DraggableWrapper />);
     const element = getByTestId("draggable-element");
 
-    // ドラッグ開始
+    // Start dragging
     fireEvent.mouseDown(element, { clientY: 150 });
 
-    // マウスを50px下に移動
+    // Move mouse 50px down
     fireEvent.mouseMove(document, { clientY: 200 });
 
-    // top が 150px (100px + 50px) になることを期待
+    // Expect top to be 150px (100px + 50px)
     expect(element.style.top).toBe("150px");
   });
 
-  test("mouseup イベントでドラッグが終了する", () => {
+  test("stops dragging on mouseup event", () => {
     const { getByTestId } = render(<DraggableWrapper />);
     const element = getByTestId("draggable-element");
 
-    // ドラッグ開始
+    // Start dragging
     fireEvent.mouseDown(element, { clientY: 150 });
     expect(element.dataset.dragging).toBe("true");
 
-    // ドラッグ終了
+    // End dragging
     fireEvent.mouseUp(document);
     expect(element.dataset.dragging).toBeUndefined();
   });
 
-  test("ドラッグ中でない場合、mousemove イベントが無視される", () => {
+  test("ignores mousemove event when not dragging", () => {
     const { getByTestId } = render(<DraggableWrapper />);
     const element = getByTestId("draggable-element");
 
-    // ドラッグを開始せずに mousemove
+    // Move mouse without starting drag
     fireEvent.mouseMove(document, { clientY: 200 });
 
-    // top は初期値のまま
+    // Top remains at initial value
     expect(element.style.top).toBe("100px");
   });
 
-  test("複数回のドラッグ操作が正しく動作する", () => {
+  test("handles multiple drag operations correctly", () => {
     const { getByTestId } = render(<DraggableWrapper />);
     const element = getByTestId("draggable-element");
 
-    // 1回目のドラッグ: 50px下に移動
+    // First drag: move 50px down
     fireEvent.mouseDown(element, { clientY: 150 });
     fireEvent.mouseMove(document, { clientY: 200 });
     fireEvent.mouseUp(document);
     expect(element.style.top).toBe("150px");
 
-    // 2回目のドラッグ: さらに30px下に移動
+    // Second drag: move another 30px down
     fireEvent.mouseDown(element, { clientY: 180 });
     fireEvent.mouseMove(document, { clientY: 210 });
     fireEvent.mouseUp(document);
     expect(element.style.top).toBe("180px");
   });
 
-  test("負の方向への移動も正しく動作する", () => {
+  test("handles movement in negative direction correctly", () => {
     const { getByTestId } = render(<DraggableWrapper />);
     const element = getByTestId("draggable-element");
 
-    // ドラッグ開始
+    // Start dragging
     fireEvent.mouseDown(element, { clientY: 150 });
 
-    // マウスを30px上に移動
+    // Move mouse 30px up
     fireEvent.mouseMove(document, { clientY: 120 });
 
-    // top が 70px (100px - 30px) になることを期待
+    // Expect top to be 70px (100px - 30px)
     expect(element.style.top).toBe("70px");
   });
 
-  test("targetRef が null の場合、エラーが発生しない", () => {
+  test("does not throw error when targetRef is null", () => {
     const targetRef = { current: null };
 
     expect(() => {
@@ -128,12 +128,12 @@ describe("Draggable", () => {
 
 describe("Draggable with LocalStorage", () => {
   beforeEach(() => {
-    // LocalStorageをクリア
+    // Clear LocalStorage
     localStorage.clear();
   });
 
   afterEach(() => {
-    // テスト後もLocalStorageをクリア
+    // Clear LocalStorage after test
     localStorage.clear();
   });
 
@@ -164,18 +164,18 @@ describe("Draggable with LocalStorage", () => {
     );
   };
 
-  test("draggableId が指定されている場合、ドラッグ終了時に位置が LocalStorage に保存される", () => {
+  test("saves position to LocalStorage when draggableId is specified and dragging ends", () => {
     const { getByTestId } = render(
       <DraggableWrapperWithId draggableId="test-draggable" />,
     );
     const element = getByTestId("draggable-element");
 
-    // ドラッグして位置を変更
+    // Drag and change position
     fireEvent.mouseDown(element, { clientY: 150 });
     fireEvent.mouseMove(document, { clientY: 200 });
     fireEvent.mouseUp(document);
 
-    // LocalStorageに保存されていることを確認
+    // Verify saved to LocalStorage
     const savedPosition = localStorage.getItem(
       "draggable-position-test-draggable",
     );
@@ -185,21 +185,21 @@ describe("Draggable with LocalStorage", () => {
     expect(parsed.y).toBe(150);
   });
 
-  test("draggableId が指定されていない場合、LocalStorage に保存されない", () => {
+  test("does not save to LocalStorage when draggableId is not specified", () => {
     const { getByTestId } = render(<DraggableWrapperWithId />);
     const element = getByTestId("draggable-element");
 
-    // ドラッグして位置を変更
+    // Drag and change position
     fireEvent.mouseDown(element, { clientY: 150 });
     fireEvent.mouseMove(document, { clientY: 200 });
     fireEvent.mouseUp(document);
 
-    // LocalStorageに保存されていないことを確認
+    // Verify not saved to LocalStorage
     expect(localStorage.length).toBe(0);
   });
 
-  test("LocalStorage に保存された位置が初期表示時に適用される", () => {
-    // 事前にLocalStorageに位置を保存
+  test("applies saved position from LocalStorage on initial render", () => {
+    // Save position to LocalStorage beforehand
     localStorage.setItem(
       "draggable-position-test-draggable",
       JSON.stringify({ y: 250 }),
@@ -210,31 +210,31 @@ describe("Draggable with LocalStorage", () => {
     );
     const element = getByTestId("draggable-element");
 
-    // LocalStorageから読み込まれた位置が適用されていることを確認
+    // Verify position loaded from LocalStorage is applied
     expect(element.style.top).toBe("250px");
   });
 
-  test("不正な JSON が保存されている場合、エラーが発生せず初期位置が使用される", () => {
-    // 不正なJSONを保存
+  test("uses initial position without error when invalid JSON is saved", () => {
+    // Save invalid JSON
     localStorage.setItem("draggable-position-test-draggable", "invalid json");
 
-    // エラーが発生せず、初期位置が使用されることを確認
+    // Verify no error occurs and initial position is used
     const { getByTestId } = render(
       <DraggableWrapperWithId draggableId="test-draggable" />,
     );
     const element = getByTestId("draggable-element");
 
-    // 初期位置が使用されていることを確認
+    // Verify initial position is used
     expect(element.style.top).toBe("100px");
   });
 
-  test("複数の異なる draggableId で独立して位置が保存される", () => {
+  test("saves positions independently for different draggableIds", () => {
     const { getByTestId: getById1, unmount: unmount1 } = render(
       <DraggableWrapperWithId draggableId="draggable-1" />,
     );
     const element1 = getById1("draggable-element");
 
-    // 1つ目の要素をドラッグ
+    // Drag first element
     fireEvent.mouseDown(element1, { clientY: 150 });
     fireEvent.mouseMove(document, { clientY: 200 });
     fireEvent.mouseUp(document);
@@ -246,14 +246,14 @@ describe("Draggable with LocalStorage", () => {
     );
     const element2 = getById2("draggable-element");
 
-    // 2つ目の要素をドラッグ
+    // Drag second element
     fireEvent.mouseDown(element2, { clientY: 150 });
     fireEvent.mouseMove(document, { clientY: 250 });
     fireEvent.mouseUp(document);
 
     unmount2();
 
-    // それぞれの位置が独立して保存されていることを確認
+    // Verify positions are saved independently
     const position1 = JSON.parse(
       localStorage.getItem("draggable-position-draggable-1") as string,
     );

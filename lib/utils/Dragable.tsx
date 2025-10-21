@@ -10,7 +10,7 @@ export const Draggable = (props: DraggableProps) => {
   const dragStartRef = useRef({ y: 0 });
   const initialPositionRef = useRef({ y: 0 });
 
-  // LocalStorageから保存された位置を読み込む
+  // Load saved position from LocalStorage
   useEffect(() => {
     const element = props.targetRef.current;
     if (!element || !props.draggableId) return;
@@ -22,13 +22,13 @@ export const Draggable = (props: DraggableProps) => {
       try {
         const { y } = JSON.parse(savedPosition);
 
-        // yが画面の最大値を超えている場合は制限
+        // Clamp y if it exceeds the screen's maximum value
         const maxY = window.innerHeight - element.offsetHeight;
         const clampedY = Math.min(y, maxY);
 
         element.style.top = `${clampedY}px`;
 
-        // 制限した値をLocalStorageに再保存
+        // Re-save the clamped value to LocalStorage
         if (clampedY !== y) {
           localStorage.setItem(storageKey, JSON.stringify({ y: clampedY }));
         }
@@ -38,13 +38,13 @@ export const Draggable = (props: DraggableProps) => {
     }
   }, [props.targetRef, props.draggableId]);
 
-  // ドラッグイベント処理
+  // Handle drag events
   useEffect(() => {
     const element = props.targetRef.current;
     if (!element) return;
 
     const handleMouseDown = (e: MouseEvent) => {
-      // 現在のCSSの値を取得
+      // Get the current CSS value
       const computedStyle = window.getComputedStyle(element);
       const currentTop = Number.parseFloat(computedStyle.top) || 0;
 
@@ -66,7 +66,7 @@ export const Draggable = (props: DraggableProps) => {
       const deltaY = e.clientY - dragStartRef.current.y;
       const newTop = initialPositionRef.current.y + deltaY;
 
-      // yが画面の最大値を超えている場合は制限
+      // Clamp y if it exceeds the screen's maximum value
       const maxY = window.innerHeight - element.offsetHeight;
       const clampedTop = Math.min(newTop, maxY);
 
@@ -77,7 +77,7 @@ export const Draggable = (props: DraggableProps) => {
       if (element) {
         delete element.dataset.dragging;
 
-        // LocalStorageに位置を保存
+        // Save position to LocalStorage
         if (props.draggableId) {
           const storageKey = `draggable-position-${props.draggableId}`;
           const computedStyle = window.getComputedStyle(element);
