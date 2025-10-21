@@ -38,6 +38,8 @@ Here's a basic example of how to use the MiniFAB component:
 ```tsx
 import { MiniFAB } from 'react-mini-fab';
 
+import 'react-mini-fab/dist/index.css';
+
 function App() {
   return (
     <MiniFAB
