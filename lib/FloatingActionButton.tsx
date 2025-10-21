@@ -38,18 +38,17 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
     // switch position animation
     if (props.position !== position) {
       setOverrideHide(true);
-      const timer = setTimeout(() => {
+      const timer1 = setTimeout(() => {
         setHideAnimation(false);
         setPosition(props.position ?? "right");
-
-        // reset override after animation
-        const timer = setTimeout(() => {
-          setHideAnimation(true);
-          setOverrideHide(false);
-        }, 100);
-        timers.push(timer);
       }, 100);
-      timers.push(timer);
+      timers.push(timer1);
+
+      // reset override after animation
+      setTimeout(() => {
+        setHideAnimation(true);
+        setOverrideHide(false);
+      }, 200);
     }
 
     return () => {
