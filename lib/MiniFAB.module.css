@@ -9,6 +9,7 @@
     padding-inline: 10px;
     padding-block: 5px;
 
+    background-color: var(--background-color);
     border: none;
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
 
@@ -43,6 +44,10 @@
         z-index: 2;
       }
     }
+    &:focus-visible {
+      outline: 2px solid var(--focus-outline-color);
+      outline-offset: 2px;
+    }
   }
   .floating-action-button-badge {
     position: absolute;
@@ -52,6 +57,7 @@
     border-radius: 50%;
     border: 2px solid white;
     pointer-events: none;
+    background-color: var(--badge-color);
     z-index: 3;
   }
 

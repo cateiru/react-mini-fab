@@ -158,6 +158,12 @@ export const MiniFAB = (props: MiniFABProps) => {
     return false;
   }, [initializeHide, props.isHide, overrideHide]);
 
+  const cssVariables = {
+    "--background-color": props.backgroundColor,
+    "--focus-outline-color": props.backgroundColor,
+    "--badge-color": props.badge?.color,
+  } as React.CSSProperties;
+
   return (
     <div
       ref={ref}
@@ -168,6 +174,7 @@ export const MiniFAB = (props: MiniFABProps) => {
         hideAnimation ? styles["hide-animation"] : undefined,
         props.includeFixedClassName ? "mini-fab-wrapper" : undefined,
       )}
+      style={cssVariables}
     >
       <Draggable targetRef={ref} draggableId={props.draggableId} />
       {props.badge && (
@@ -176,7 +183,6 @@ export const MiniFAB = (props: MiniFABProps) => {
             styles["floating-action-button-badge"],
             props.includeFixedClassName ? "mini-fab-badge" : undefined,
           )}
-          style={{ backgroundColor: props.badge.color }}
         />
       )}
       <button
@@ -192,9 +198,6 @@ export const MiniFAB = (props: MiniFABProps) => {
           styles["floating-action-button"],
           props.includeFixedClassName ? "mini-fab-button" : undefined,
         )}
-        style={{
-          backgroundColor: props.backgroundColor,
-        }}
       >
         <span
           className={classNames(
