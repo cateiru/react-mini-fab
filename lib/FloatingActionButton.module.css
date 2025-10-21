@@ -65,6 +65,9 @@
   /* Styles when hidden */
   &.hide {
     pointer-events: none;
+    .floating-action-button-badge {
+      display: none;
+    }
   }
 
   /** Styles when aligned to the left */

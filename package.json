@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",
+    "@storybook/addon-docs": "^9.1.13",
     "@storybook/addon-essentials": "9.0.0-alpha.12",
     "@storybook/addon-links": "9.1.13",
     "@storybook/react": "^9.1.13",
