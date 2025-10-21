@@ -16,7 +16,9 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:storybook": "storybook dev -p 6006",
     "build": "vite build",
+    "build:storybook": "storybook build",
     "lint": "biome lint .",
     "lint:write": "biome lint --write .",
     "format": "biome format .",
@@ -25,9 +27,7 @@
     "check:write": "biome check --write .",
     "test": "vitest run",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "test:coverage": "vitest run --coverage"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

@@ -38,7 +38,7 @@ jobs:
         run: pnpm install
 
       - name: Build Storybook
-        run: pnpm run build-storybook
+        run: pnpm run build:storybook
 
       - name: Set up GitHub Pages
         uses: actions/configure-pages@v5
