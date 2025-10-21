@@ -11,6 +11,7 @@ type FloatingActionButtonProps = {
   ariaLabel?: string;
   backgroundColor?: string;
   position?: "left" | "right"; // default: left
+  draggableId?: string;
 
   children?: React.ReactNode;
 };
@@ -71,7 +72,7 @@ export const FloatingActionButton = (props: FloatingActionButtonProps) => {
         hideAnimation ? styles["hide-animation"] : undefined,
       )}
     >
-      <Draggable targetRef={ref} />
+      <Draggable targetRef={ref} draggableId={props.draggableId} />
       <button
         title={props.title}
         aria-label={props.ariaLabel}

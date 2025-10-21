@@ -23,6 +23,7 @@ export const IconLeft: Story = {
     backgroundColor: "red",
     position: "left",
     isHide: true,
+    draggableId: "fab-1",
   },
   render: (args) => {
     const [hided, setHidden] = useState(false);
@@ -52,6 +53,7 @@ export const IconRight: Story = {
     title: "Floating Action Button",
     backgroundColor: "blue",
     position: "right",
+    draggableId: "fab-2",
   },
   render: (args) => {
     const [hided, setHidden] = useState(false);
@@ -80,6 +82,7 @@ export const SwitchablePosition: Story = {
     ariaLabel: "FloatingActionButton",
     title: "Floating Action Button",
     backgroundColor: "blue",
+    draggableId: "fab-3",
   },
   render: (args) => {
     const [position, setPosition] = useState<"left" | "right">("right");
@@ -111,6 +114,7 @@ export const TextLeft: Story = {
     ariaLabel: "FloatingActionButton",
     title: "Floating Action Button",
     backgroundColor: "green",
+    draggableId: "fab-4",
     children: <p style={{ color: "#fff" }}>Text Hello World</p>,
   },
 };
