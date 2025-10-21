@@ -1,0 +1,53 @@
+name: Storybook を GitHub Pages にデプロイ
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v5
+
+      - name: Node.js をセットアップ
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: pnpm をセットアップ
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: 依存関係をインストール
+        run: pnpm install
+
+      - name: Storybook をビルド
+        run: pnpm run build-storybook
+
+      - name: GitHub Pages を設定
+        uses: actions/configure-pages@v5
+
+      - name: ビルド成果物をアップロード
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: storybook-static
+
+      - name: GitHub Pages にデプロイ
+        id: deployment
+        uses: actions/deploy-pages@v4
