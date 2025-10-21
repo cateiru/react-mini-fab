@@ -4,7 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-react-mini-fab は React 向けの UI コンポーネントライブラリです。Vite を使用してビルドされ、UMD と ES モジュールの両方の形式で配布されます。
+react-mini-fab は、軽量でカスタマイズ可能な Mini Floating Action Button（Mini FAB）コンポーネントを提供する React ライブラリです。Vite を使用してビルドされ、UMD と ES モジュールの両方の形式で配布されます。
+
+### 主要コンポーネント
+
+- **MiniFAB**: ドラッグ可能な Floating Action Button
+  - 縦方向にドラッグ可能（位置は `draggableId` を指定することで localStorage に永続化）
+  - 左右の位置切り替え時にスムーズなアニメーション
+  - バッジインジケーター表示のサポート
+  - カスタマイズ可能な色とアクセシビリティラベル
+- **Draggable**: ドラッグ機能を提供するユーティリティコンポーネント
 
 ## 開発コマンド
 
