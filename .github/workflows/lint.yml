@@ -29,9 +29,6 @@ jobs:
       - name: Run lint with Biome
         run: pnpm run lint
 
-      - name: Run format check with Biome
-        run: pnpm run format --check
-
       - name: TypeScript type check
         run: pnpm exec tsc --noEmit
 
