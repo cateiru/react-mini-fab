@@ -1,4 +1,4 @@
-name: コード品質チェック
+name: Check Code Quality
 
 on:
   push:
@@ -10,30 +10,30 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: リポジトリをチェックアウト
+      - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Node.js をセットアップ
+      - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: "20"
 
-      - name: pnpm をセットアップ
+      - name: Set up pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
 
-      - name: 依存関係をインストール
+      - name: Install dependencies
         run: pnpm install
 
-      - name: Biome でリント
+      - name: Run lint with Biome
         run: pnpm run lint
 
-      - name: Biome でフォーマットチェック
+      - name: Run format check with Biome
         run: pnpm run format --check
 
-      - name: TypeScript 型チェック
+      - name: TypeScript type check
         run: pnpm exec tsc --noEmit
 
-      - name: ビルドテスト
+      - name: Run build test
         run: pnpm run build
