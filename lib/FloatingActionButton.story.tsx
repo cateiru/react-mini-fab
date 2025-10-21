@@ -22,7 +22,7 @@ export const IconLeft: Story = {
     title: "Floating Action Button",
     backgroundColor: "red",
     position: "left",
-    isHide: true
+    isHide: true,
   },
   render: (args) => {
     const [hided, setHidden] = useState(false);
