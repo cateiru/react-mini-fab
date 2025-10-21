@@ -35,7 +35,11 @@ describe("classNames", () => {
   test("条件付きクラス名を扱う", () => {
     const isActive = true;
     const isDisabled = false;
-    const result = classNames("button", isActive && "active", isDisabled && "disabled");
+    const result = classNames(
+      "button",
+      isActive && "active",
+      isDisabled && "disabled",
+    );
     expect(result).toBe("button active");
   });
 });
