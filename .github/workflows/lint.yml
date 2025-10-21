@@ -27,7 +27,7 @@ jobs:
         run: pnpm install
 
       - name: Run lint with Biome
-        run: pnpm run lint
+        run: pnpm run check
 
       - name: TypeScript type check
         run: pnpm exec tsc --noEmit
