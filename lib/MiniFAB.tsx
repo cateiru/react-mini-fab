@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import styles from "./FloatingActionButton.module.css";
+import styles from "./MiniFAB.module.css";
 import { classNames } from "./utils/classNames";
 import { Draggable } from "./utils/Draggable";
 
 /**
- * Props for the FloatingActionButton component.
+ * Props for the MiniFAB component.
  */
-type FloatingActionButtonProps = {
+export type MiniFABProps = {
   /**
    * Callback function invoked when the button is clicked.
    */
@@ -81,7 +81,7 @@ type Badge = {
  * @example
  *
  * ```tsx
- * <FloatingActionButton
+ * <MiniFAB
  *   onClick={() => console.log('Clicked!')}
  *   position="right"
  *   title="Help"
@@ -91,10 +91,10 @@ type Badge = {
  *   badge={{ color: '#ff0000' }}
  * >
  *   <HelpIcon />
- * </FloatingActionButton>
+ * </MiniFAB>
  * ```
  */
-export const FloatingActionButton = (props: FloatingActionButtonProps) => {
+export const MiniFAB = (props: MiniFABProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [initializeHide, setInitializeHide] = useState(true);
   const [overrideHide, setOverrideHide] = useState(false);

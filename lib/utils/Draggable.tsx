@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Props for the Draggable component
  */
-type DraggableProps = {
+export type DraggableProps = {
   /** Reference to the HTML element that should be made draggable */
   targetRef: React.RefObject<HTMLElement | null>;
   /** Optional unique identifier for saving/loading position from localStorage */

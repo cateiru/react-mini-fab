@@ -2,15 +2,15 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { useEffect, useState } from "react";
 import Accessibility from "../public/accessibility.svg";
 import Construct from "../public/construct.svg";
-import { FloatingActionButton } from "./FloatingActionButton";
+import { MiniFAB } from "./MiniFAB";
 
 const meta = {
-  title: "FloatingActionButton",
-  component: FloatingActionButton,
+  title: "MiniFAB",
+  component: MiniFAB,
   parameters: {
     layout: "centered",
   },
-} satisfies Meta<typeof FloatingActionButton>;
+} satisfies Meta<typeof MiniFAB>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 export const IconLeft: Story = {
   name: "Icon Left",
   args: {
-    ariaLabel: "FloatingActionButton",
+    ariaLabel: "MiniFAB",
     title: "Floating Action Button",
     backgroundColor: "red",
     position: "left",
@@ -44,18 +44,14 @@ export const IconLeft: Story = {
         <button type="button" onClick={() => setHidden(!hided)}>
           Toggle FAB
         </button>
-        <FloatingActionButton
-          {...args}
-          isHide={hided}
-          onClick={() => setClicked(true)}
-        >
+        <MiniFAB {...args} isHide={hided} onClick={() => setClicked(true)}>
           <img
             src={Accessibility}
             alt="accessibility icon"
             width="20px"
             height="20px"
           />
-        </FloatingActionButton>
+        </MiniFAB>
       </>
     );
   },
@@ -64,7 +60,7 @@ export const IconLeft: Story = {
 export const IconRight: Story = {
   name: "Icon Right",
   args: {
-    ariaLabel: "FloatingActionButton",
+    ariaLabel: "MiniFAB",
     title: "Floating Action Button",
     backgroundColor: "blue",
     position: "right",
@@ -78,14 +74,14 @@ export const IconRight: Story = {
         <button type="button" onClick={() => setHidden(!hided)}>
           Toggle FAB
         </button>
-        <FloatingActionButton {...args} isHide={hided}>
+        <MiniFAB {...args} isHide={hided}>
           <img
             src={Accessibility}
             alt="accessibility icon"
             width="20px"
             height="20px"
           />
-        </FloatingActionButton>
+        </MiniFAB>
       </>
     );
   },
@@ -94,7 +90,7 @@ export const IconRight: Story = {
 export const SwitchablePosition: Story = {
   name: "Switchable Position",
   args: {
-    ariaLabel: "FloatingActionButton",
+    ariaLabel: "MiniFAB",
     title: "Floating Action Button",
     backgroundColor: "purple",
     draggableId: "fab-3",
@@ -110,14 +106,14 @@ export const SwitchablePosition: Story = {
         >
           Toggle FAB Position
         </button>
-        <FloatingActionButton {...args} position={position}>
+        <MiniFAB {...args} position={position}>
           <img
             src={Construct}
             alt="accessibility icon"
             width="20px"
             height="20px"
           />
-        </FloatingActionButton>
+        </MiniFAB>
       </>
     );
   },
@@ -126,7 +122,7 @@ export const SwitchablePosition: Story = {
 export const TextLeft: Story = {
   name: "Text",
   args: {
-    ariaLabel: "FloatingActionButton",
+    ariaLabel: "MiniFAB",
     title: "Floating Action Button",
     backgroundColor: "green",
     draggableId: "fab-4",
@@ -137,7 +133,7 @@ export const TextLeft: Story = {
 export const Badge: Story = {
   name: "Badge",
   args: {
-    ariaLabel: "FloatingActionButton",
+    ariaLabel: "MiniFAB",
     title: "Floating Action Button",
     backgroundColor: "orange",
     position: "left",
@@ -157,7 +153,7 @@ export const Badge: Story = {
 export const BadgeWithText: Story = {
   name: "Badge With Text",
   args: {
-    ariaLabel: "FloatingActionButton",
+    ariaLabel: "MiniFAB",
     title: "Floating Action Button",
     backgroundColor: "#b02883",
     position: "left",

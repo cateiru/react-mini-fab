@@ -7,7 +7,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: "./lib/main.tsx",
-      name: "react-help-window",
+      name: "react-mini-fab",
       fileName: "index",
     },
     rollupOptions: {

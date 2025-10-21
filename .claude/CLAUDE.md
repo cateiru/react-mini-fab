@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-react-help-window は React 向けの UI コンポーネントライブラリです。Vite を使用してビルドされ、UMD と ES モジュールの両方の形式で配布されます。
+react-mini-fab は React 向けの UI コンポーネントライブラリです。Vite を使用してビルドされ、UMD と ES モジュールの両方の形式で配布されます。
 
 ## 開発コマンド
 
