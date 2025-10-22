@@ -19,6 +19,28 @@ A lightweight and customizable Mini Floating Action Button (Mini FAB) component 
 
 ## Installation
 
+### Prerequisites
+
+This library requires React as a peer dependency. Make sure you have React installed in your project:
+
+- React 17.x, 18.x, or 19.x
+
+If you don't have React installed, install it first:
+
+```bash
+npm install react react-dom
+```
+
+```bash
+yarn add react react-dom
+```
+
+```bash
+pnpm add react react-dom
+```
+
+### Install react-mini-fab
+
 Install the package using your preferred package manager:
 
 ```bash
