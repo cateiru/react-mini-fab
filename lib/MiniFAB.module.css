@@ -24,7 +24,9 @@
       pointer-events: none;
 
       /* Center align images */
-      img, svg, span {
+      img,
+      svg,
+      span {
         vertical-align: bottom;
       }
     }
