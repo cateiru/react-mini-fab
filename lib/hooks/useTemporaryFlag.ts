@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { getCookie, setCookie } from "../utils/cookie";
 
 /**
  * Custom hook to set a temporary flag using cookies
@@ -60,8 +61,7 @@ export function useTemporaryFlag(
   }, [id, isActive]);
 
   const setFlag = (expireTime: Date) => {
-    const expires = expireTime.toUTCString();
-    document.cookie = `${id}=1; expires=${expires}; path=/; SameSite=Lax`;
+    setCookie(id, "1", expireTime);
     setIsActive(true);
 
     // Clear existing timeout
@@ -84,18 +84,4 @@ export function useTemporaryFlag(
   };
 
   return [isActive, setFlag];
-}
-
-/**
- * Get a value from cookies
- */
-function getCookie(name: string): string | undefined {
-  const cookies = document.cookie.split("; ");
-  for (const cookie of cookies) {
-    const [key, value] = cookie.split("=");
-    if (key === name) {
-      return value;
-    }
-  }
-  return undefined;
 }
