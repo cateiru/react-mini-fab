@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Custom hook to set a temporary flag using cookies
@@ -25,26 +25,62 @@ export function useTemporaryFlag(
   const [isActive, setIsActive] = useState<boolean>(() => {
     return getCookie(id) === "1";
   });
+  const timeoutIdRef = useRef<number | null>(null);
 
-  // Monitor cookie changes
+  // Monitor cookie state only when flag is active to detect manual deletion
   useEffect(() => {
+    // Only set up polling if flag is active
+    if (!isActive) {
+      return;
+    }
+
     const checkCookie = () => {
       const cookieValue = getCookie(id);
-      setIsActive(cookieValue === "1");
+      // Update state if cookie was deleted externally
+      if (cookieValue !== "1") {
+        setIsActive(false);
+        // Clear timeout since cookie is already gone
+        if (timeoutIdRef.current !== null) {
+          clearTimeout(timeoutIdRef.current);
+          timeoutIdRef.current = null;
+        }
+      }
     };
 
-    // Check cookie periodically (every 1 second)
+    // Check cookie periodically to detect manual deletion
+    // This is only active when isActive is true, minimizing unnecessary checks
     const intervalId = setInterval(checkCookie, 1000);
 
     return () => {
       clearInterval(intervalId);
+      if (timeoutIdRef.current !== null) {
+        clearTimeout(timeoutIdRef.current);
+      }
     };
-  }, [id]);
+  }, [id, isActive]);
 
   const setFlag = (expireTime: Date) => {
     const expires = expireTime.toUTCString();
     document.cookie = `${id}=1; expires=${expires}; path=/; SameSite=Lax`;
     setIsActive(true);
+
+    // Clear existing timeout
+    if (timeoutIdRef.current !== null) {
+      clearTimeout(timeoutIdRef.current);
+    }
+
+    // Calculate milliseconds until expiration
+    const now = Date.now();
+    const expirationTime = expireTime.getTime();
+    const timeUntilExpiration = expirationTime - now;
+
+    // Set timeout to update state when cookie expires
+    if (timeUntilExpiration > 0) {
+      timeoutIdRef.current = setTimeout(() => {
+        setIsActive(false);
+        timeoutIdRef.current = null;
+      }, timeUntilExpiration) as unknown as number;
+    }
   };
 
   return [isActive, setFlag];
