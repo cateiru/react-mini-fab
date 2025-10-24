@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getCookie, setCookie } from "../utils/cookie";
 
 /**
  * Custom hook to set a temporary flag using cookies
  *
  * @param id - Unique ID to use as the cookie name
- * @returns [isActive, setFlag] - Tuple of the flag state and a function to set the flag with an expiration time
+ * @returns [isActive, setFlag, updateFromCookie] - Tuple of the flag state, a function to set the flag, and a function to sync with cookie
  *
  * @example
  *
  * ```tsx
- * const [isHidden, setHidden] = useTemporaryFlag('minifab-hidden');
+ * const [isHidden, setHidden, updateFromCookie] = useTemporaryFlag('minifab-hidden');
  *
  * // Set a flag that expires in 24 hours
  * const hide24Hours = () => {
@@ -18,70 +18,99 @@ import { getCookie, setCookie } from "../utils/cookie";
  *   expireTime.setHours(expireTime.getHours() + 24);
  *   setHidden(expireTime);
  * };
+ *
+ * // Manually sync with cookie state (e.g., after page becomes visible)
+ * updateFromCookie();
  * ```
  */
 export function useTemporaryFlag(
   id: string,
-): [boolean, (expireTime: Date) => void] {
-  const [isActive, setIsActive] = useState<boolean>(() => {
-    return getCookie(id) === "1";
-  });
-  const timeoutIdRef = useRef<number | null>(null);
+): [boolean, (expireTime: Date) => void, () => void] {
+  const [isActive, setIsActive] = useState(false);
 
-  // Monitor cookie state only when flag is active to detect manual deletion
-  useEffect(() => {
-    // Only set up polling if flag is active
-    if (!isActive) {
+  const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /**
+   * Reads the expiration timestamp from the cookie and schedules the flag to expire.
+   * If the cookie has already expired or doesn't exist, sets isActive to false.
+   */
+  const updateFromCookie = useCallback(() => {
+    const cookieValue = getCookie(id);
+
+    if (!cookieValue) {
+      setIsActive(false);
       return;
     }
 
-    const checkCookie = () => {
-      const cookieValue = getCookie(id);
-      // Update state if cookie was deleted externally
-      if (cookieValue !== "1") {
-        setIsActive(false);
-        // Clear timeout since cookie is already gone
-        if (timeoutIdRef.current !== null) {
-          clearTimeout(timeoutIdRef.current);
-          timeoutIdRef.current = null;
-        }
-      }
-    };
+    const expirationTime = Number.parseInt(cookieValue, 10);
 
-    // Check cookie periodically to detect manual deletion
-    // This is only active when isActive is true, minimizing unnecessary checks
-    const intervalId = setInterval(checkCookie, 1000);
+    if (Number.isNaN(expirationTime)) {
+      setIsActive(false);
+      return;
+    }
 
-    return () => {
-      clearInterval(intervalId);
-      if (timeoutIdRef.current !== null) {
-        clearTimeout(timeoutIdRef.current);
-      }
-    };
-  }, [id, isActive]);
+    const now = Date.now();
+    const timeUntilExpiration = expirationTime - now;
 
-  const setFlag = (expireTime: Date) => {
-    setCookie(id, "1", expireTime);
+    if (timeUntilExpiration <= 0) {
+      setIsActive(false);
+      return;
+    }
+
     setIsActive(true);
 
-    // Clear existing timeout
+    // Clear existing timeout if any
     if (timeoutIdRef.current !== null) {
       clearTimeout(timeoutIdRef.current);
     }
 
-    // Calculate milliseconds until expiration
-    const now = Date.now();
-    const expirationTime = expireTime.getTime();
-    const timeUntilExpiration = expirationTime - now;
+    // Schedule the flag to expire
+    timeoutIdRef.current = setTimeout(() => {
+      setIsActive(false);
+      timeoutIdRef.current = null;
+    }, timeUntilExpiration);
+  }, [id]);
 
-    // Set timeout to update state when cookie expires
-    if (timeUntilExpiration > 0) {
+  // Initialize on mount
+  useEffect(() => {
+    updateFromCookie();
+
+    return () => {
+      if (timeoutIdRef.current !== null) {
+        clearTimeout(timeoutIdRef.current);
+      }
+    };
+  }, [updateFromCookie]);
+
+  const setFlag = useCallback(
+    (expireTime: Date) => {
+      const now = Date.now();
+      const expirationTime = expireTime.getTime();
+      const timeUntilExpiration = expirationTime - now;
+
+      if (timeUntilExpiration <= 0) {
+        return;
+      }
+
+      // Store expiration timestamp in cookie
+      setCookie(id, expirationTime.toString(), expireTime);
+
+      // Set flag to active
+      setIsActive(true);
+
+      // Clear existing timeout if any
+      if (timeoutIdRef.current !== null) {
+        clearTimeout(timeoutIdRef.current);
+      }
+
+      // Schedule the flag to expire
       timeoutIdRef.current = setTimeout(() => {
         setIsActive(false);
         timeoutIdRef.current = null;
-      }, timeUntilExpiration) as unknown as number;
-    }
-  };
+      }, timeUntilExpiration);
+    },
+    [id],
+  );
 
-  return [isActive, setFlag];
+  return [isActive, setFlag, updateFromCookie];
 }

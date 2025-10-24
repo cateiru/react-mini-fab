@@ -47,7 +47,8 @@ describe("cookie utils", () => {
       expect(result).toBeUndefined();
 
       // Cleanup
-      document.cookie = "other-cookie=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+      document.cookie =
+        "other-cookie=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
     });
   });
 
