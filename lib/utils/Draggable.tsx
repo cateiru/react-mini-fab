@@ -35,8 +35,10 @@ const DRAG_THRESHOLD = 5;
  * const element = document.getElementById('my-element');
  * const clampedY = clampYPosition(1500, element); // If screen height is 1000px, adjusted to prevent element from going off-screen
  * ```
+ *
+ * @internal - Exported for testing purposes only
  */
-const clampYPosition = (y: number, element: HTMLElement): number => {
+export const clampYPosition = (y: number, element: HTMLElement): number => {
   const maxY = window.innerHeight - element.offsetHeight;
   return Math.min(Math.max(0, y), maxY);
 };
@@ -59,8 +61,10 @@ const clampYPosition = (y: number, element: HTMLElement): number => {
  *   element.style.top = `${savedY}px`;
  * }
  * ```
+ *
+ * @internal - Exported for testing purposes only
  */
-const loadPositionFromStorage = (draggableId: string): number | null => {
+export const loadPositionFromStorage = (draggableId: string): number | null => {
   const storageKey = `draggable-position-${draggableId}`;
   const savedPosition = localStorage.getItem(storageKey);
 
@@ -90,8 +94,10 @@ const loadPositionFromStorage = (draggableId: string): number | null => {
  * const currentY = element.getBoundingClientRect().top;
  * savePositionToStorage('my-element', currentY);
  * ```
+ *
+ * @internal - Exported for testing purposes only
  */
-const savePositionToStorage = (draggableId: string, y: number): void => {
+export const savePositionToStorage = (draggableId: string, y: number): void => {
   const storageKey = `draggable-position-${draggableId}`;
   localStorage.setItem(storageKey, JSON.stringify({ y }));
 };
@@ -114,8 +120,10 @@ const savePositionToStorage = (draggableId: string, y: number): void => {
  * const distance = calculateDragDistance(100, 100, 150, 150);
  * console.log(distance); // Approximately 70.71 (√(50² + 50²))
  * ```
+ *
+ * @internal - Exported for testing purposes only
  */
-const calculateDragDistance = (
+export const calculateDragDistance = (
   startX: number,
   startY: number,
   endX: number,
@@ -142,8 +150,10 @@ const calculateDragDistance = (
  * const currentTop = getCurrentTop(element);
  * console.log(currentTop); // Example: 150
  * ```
+ *
+ * @internal - Exported for testing purposes only
  */
-const getCurrentTop = (element: HTMLElement): number => {
+export const getCurrentTop = (element: HTMLElement): number => {
   const computedStyle = window.getComputedStyle(element);
   return Number.parseFloat(computedStyle.top) || 0;
 };
