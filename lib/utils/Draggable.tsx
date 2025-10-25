@@ -13,12 +13,28 @@ export type DraggableProps = {
 };
 
 // Constants
-const DRAG_THRESHOLD = 5; // Threshold for drag detection (pixels)
+
+/**
+ * Threshold in pixels to distinguish between a drag and a click.
+ * If the distance moved between mousedown and mouseup exceeds this value, it is considered a drag.
+ * @constant {number}
+ */
+const DRAG_THRESHOLD = 5;
 
 // Utility functions
 
 /**
- * Clamps the Y position to prevent element from going beyond screen bounds
+ * Clamps the Y position to prevent the element from going beyond screen bounds.
+ *
+ * @param y - The Y coordinate value to clamp
+ * @param element - The target HTML element (used to retrieve element height)
+ * @returns The clamped Y coordinate (minimum 0, maximum window.innerHeight - element.offsetHeight)
+ *
+ * @example
+ * ```tsx
+ * const element = document.getElementById('my-element');
+ * const clampedY = clampYPosition(1500, element); // If screen height is 1000px, adjusted to prevent element from going off-screen
+ * ```
  */
 const clampYPosition = (y: number, element: HTMLElement): number => {
   const maxY = window.innerHeight - element.offsetHeight;
@@ -26,7 +42,23 @@ const clampYPosition = (y: number, element: HTMLElement): number => {
 };
 
 /**
- * Loads position from localStorage
+ * Loads saved position information from localStorage.
+ *
+ * @param draggableId - Unique identifier for the draggable element
+ * @returns The saved Y coordinate value. Returns null if not saved or if parsing fails
+ *
+ * @remarks
+ * - Storage key is generated in the format `draggable-position-${draggableId}`
+ * - Saved data must be a JSON string in the format `{ y: number }`
+ * - If parsing fails, an error message is logged to the console
+ *
+ * @example
+ * ```tsx
+ * const savedY = loadPositionFromStorage('my-element');
+ * if (savedY !== null) {
+ *   element.style.top = `${savedY}px`;
+ * }
+ * ```
  */
 const loadPositionFromStorage = (draggableId: string): number | null => {
   const storageKey = `draggable-position-${draggableId}`;
@@ -44,7 +76,20 @@ const loadPositionFromStorage = (draggableId: string): number | null => {
 };
 
 /**
- * Saves position to localStorage
+ * Saves the current position information to localStorage.
+ *
+ * @param draggableId - Unique identifier for the draggable element
+ * @param y - The Y coordinate value to save
+ *
+ * @remarks
+ * - Storage key is generated in the format `draggable-position-${draggableId}`
+ * - Data is saved as a JSON string in the format `{ y: number }`
+ *
+ * @example
+ * ```tsx
+ * const currentY = element.getBoundingClientRect().top;
+ * savePositionToStorage('my-element', currentY);
+ * ```
  */
 const savePositionToStorage = (draggableId: string, y: number): void => {
   const storageKey = `draggable-position-${draggableId}`;
@@ -52,7 +97,23 @@ const savePositionToStorage = (draggableId: string, y: number): void => {
 };
 
 /**
- * Calculates the distance between two points
+ * Calculates the Euclidean distance between two points.
+ *
+ * @param startX - X coordinate of the starting point
+ * @param startY - Y coordinate of the starting point
+ * @param endX - X coordinate of the ending point
+ * @param endY - Y coordinate of the ending point
+ * @returns The distance between the two points in pixels
+ *
+ * @remarks
+ * Uses the Pythagorean theorem `√(Δx² + Δy²)` to calculate the distance.
+ * This function is used to distinguish between drag and click operations.
+ *
+ * @example
+ * ```tsx
+ * const distance = calculateDragDistance(100, 100, 150, 150);
+ * console.log(distance); // Approximately 70.71 (√(50² + 50²))
+ * ```
  */
 const calculateDragDistance = (
   startX: number,
@@ -66,7 +127,21 @@ const calculateDragDistance = (
 };
 
 /**
- * Gets the current top position of an element
+ * Gets the current top position of an element.
+ *
+ * @param element - The target HTML element
+ * @returns The value of the element's top style property in pixels. Returns 0 if not set
+ *
+ * @remarks
+ * - Uses `window.getComputedStyle()` to retrieve computed styles
+ * - Retrieves not only inline styles but also values set via CSS
+ * - Returns 0 if parsing fails or if the value is not set
+ *
+ * @example
+ * ```tsx
+ * const currentTop = getCurrentTop(element);
+ * console.log(currentTop); // Example: 150
+ * ```
  */
 const getCurrentTop = (element: HTMLElement): number => {
   const computedStyle = window.getComputedStyle(element);
@@ -76,7 +151,26 @@ const getCurrentTop = (element: HTMLElement): number => {
 // Custom hooks
 
 /**
- * Hook to load initial position from localStorage
+ * Custom hook to load the saved initial position from localStorage and apply it to the element.
+ *
+ * @param targetRef - Reference to the draggable element
+ * @param draggableId - Unique identifier for the element (optional). Loading from localStorage only occurs when specified
+ *
+ * @remarks
+ * - Executes only once when the component mounts
+ * - Does nothing if `draggableId` is not specified
+ * - If the loaded position is off-screen, it is automatically clamped and re-saved
+ * - Re-executes if `targetRef` or `draggableId` changes (included in dependency array)
+ *
+ * @example
+ * ```tsx
+ * const MyComponent = () => {
+ *   const elementRef = useRef<HTMLDivElement>(null);
+ *   useInitialPosition(elementRef, 'my-draggable-element');
+ *
+ *   return <div ref={elementRef}>Draggable content</div>;
+ * };
+ * ```
  */
 const useInitialPosition = (
   targetRef: React.RefObject<HTMLElement | null>,
@@ -100,7 +194,41 @@ const useInitialPosition = (
 };
 
 /**
- * Hook to handle drag events
+ * Custom hook to handle drag events.
+ *
+ * @param targetRef - Reference to the draggable element
+ * @param draggableId - Unique identifier for the element (optional). If specified, the position is saved to localStorage when dragging ends
+ * @param onDragStateChange - Callback function invoked when drag state changes (optional). Receives `true` if dragged, `false` if just clicked
+ *
+ * @remarks
+ * This hook handles the following three mouse events:
+ * 1. **mousedown**: Records initial position and coordinates when dragging starts
+ * 2. **mousemove**: Updates element position in real-time during drag (clamped to prevent going off-screen)
+ * 3. **mouseup**: When dragging ends, performs the following:
+ *    - Calculates drag distance and determines whether it was a drag or click (threshold: {@link DRAG_THRESHOLD})
+ *    - Notifies parent component of the result
+ *    - Saves position to localStorage (if draggableId is specified)
+ *
+ * @remarks
+ * - Uses `isDraggingRef` to manage state, preventing unnecessary re-renders
+ * - Sets `element.dataset.dragging` to `"true"` during drag (can be used for CSS control)
+ * - `mousemove` and `mouseup` events are registered on `document`, so dragging continues even when mouse leaves the element
+ * - Cleanup function properly removes event listeners, preventing memory leaks
+ *
+ * @example
+ * ```tsx
+ * const MyComponent = () => {
+ *   const elementRef = useRef<HTMLDivElement>(null);
+ *   const [wasDragged, setWasDragged] = useState(false);
+ *
+ *   useDragHandlers(elementRef, 'my-element', (dragged) => {
+ *     console.log(dragged ? 'Element was dragged' : 'Element was clicked');
+ *     setWasDragged(dragged);
+ *   });
+ *
+ *   return <div ref={elementRef}>Drag me!</div>;
+ * };
+ * ```
  */
 const useDragHandlers = (
   targetRef: React.RefObject<HTMLElement | null>,
