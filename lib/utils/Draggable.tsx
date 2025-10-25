@@ -8,6 +8,8 @@ export type DraggableProps = {
   targetRef: React.RefObject<HTMLElement | null>;
   /** Optional unique identifier for saving/loading position from localStorage */
   draggableId?: string;
+  /** Callback function invoked when drag state changes. Returns true if the element was dragged (moved > 5px), false otherwise. */
+  onDragStateChange?: (wasDragged: boolean) => void;
 };
 
 /**
@@ -37,6 +39,7 @@ export const Draggable = (props: DraggableProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ y: 0 });
   const initialPositionRef = useRef({ y: 0 });
+  const mouseDownPositionRef = useRef({ x: 0, y: 0 });
 
   // Load saved position from LocalStorage
   useEffect(() => {
@@ -84,6 +87,12 @@ export const Draggable = (props: DraggableProps) => {
         y: e.clientY,
       };
 
+      // Record mouse down position for drag detection
+      mouseDownPositionRef.current = {
+        x: e.clientX,
+        y: e.clientY,
+      };
+
       element.dataset.dragging = "true";
       setIsDragging(true);
     };
@@ -101,9 +110,20 @@ export const Draggable = (props: DraggableProps) => {
       element.style.top = `${clampedTop}px`;
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e: MouseEvent) => {
       if (element) {
         delete element.dataset.dragging;
+
+        // Calculate drag distance to determine if it was a drag or click
+        const deltaX = e.clientX - mouseDownPositionRef.current.x;
+        const deltaY = e.clientY - mouseDownPositionRef.current.y;
+        const dragDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        // Threshold for drag detection (5px)
+        const wasDragged = dragDistance > 5;
+
+        // Notify parent component about drag state
+        props.onDragStateChange?.(wasDragged);
 
         // Save position to LocalStorage
         if (props.draggableId) {
@@ -125,7 +145,7 @@ export const Draggable = (props: DraggableProps) => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, props.targetRef, props.draggableId]);
+  }, [isDragging, props]);
 
   return null;
 };

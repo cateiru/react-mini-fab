@@ -110,6 +110,8 @@ export const MiniFAB = (props: MiniFABProps) => {
   const [position, setPosition] = useState<"left" | "right" | undefined>(
     props.position,
   );
+  const [wasDragged, setWasDragged] = useState(false);
+  const dragResetTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const timers: NodeJS.Timeout[] = [];
@@ -144,6 +146,32 @@ export const MiniFAB = (props: MiniFABProps) => {
     };
   }, [initializeHide, position, props.position]);
 
+  // Cleanup drag reset timer on unmount
+  useEffect(() => {
+    return () => {
+      if (dragResetTimerRef.current) {
+        clearTimeout(dragResetTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleDragStateChange = (dragged: boolean) => {
+    if (dragged) {
+      setWasDragged(true);
+
+      // Clear any existing timer
+      if (dragResetTimerRef.current) {
+        clearTimeout(dragResetTimerRef.current);
+      }
+
+      // Reset wasDragged flag after 100ms
+      dragResetTimerRef.current = setTimeout(() => {
+        setWasDragged(false);
+        dragResetTimerRef.current = null;
+      }, 100);
+    }
+  };
+
   const isHide = useMemo(() => {
     if (overrideHide) {
       return true;
@@ -176,7 +204,11 @@ export const MiniFAB = (props: MiniFABProps) => {
       )}
       style={cssVariables}
     >
-      <Draggable targetRef={ref} draggableId={props.draggableId} />
+      <Draggable
+        targetRef={ref}
+        draggableId={props.draggableId}
+        onDragStateChange={handleDragStateChange}
+      />
       {props.badge && (
         <span
           className={classNames(
@@ -191,6 +223,8 @@ export const MiniFAB = (props: MiniFABProps) => {
         onClick={() => {
           // if hidden, do nothing
           if (isHide) return;
+          // if dragged, do nothing
+          if (wasDragged) return;
           props.onClick?.();
         }}
         type="button"
