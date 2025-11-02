@@ -1,6 +1,19 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
+  "schedule": ["before 3am on Monday"],
+  "timezone": "Asia/Tokyo",
+  "labels": ["dependencies"],
+  "semanticCommits": "disabled",
+  "commitMessagePrefix": "chore:",
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 10,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 3am on Monday"],
+    "automerge": true,
+    "automergeType": "pr"
+  },
   "packageRules": [
     {
       "matchPackagePatterns": ["*"],
@@ -19,13 +32,64 @@
       "matchPackageNames": ["react", "react-dom"],
       "matchPackagePatterns": ["@types/react"],
       "schedule": ["before 3am on Monday"]
+    },
+    {
+      "groupName": "Storybook",
+      "matchPackagePatterns": ["^@storybook/", "^storybook$"]
+    },
+    {
+      "groupName": "Testing Libraries",
+      "matchPackagePatterns": ["^@testing-library/", "^vitest", "^@vitest/"]
+    },
+    {
+      "groupName": "Build Tools",
+      "matchPackageNames": [
+        "vite",
+        "@vitejs/plugin-react",
+        "vite-plugin-dts",
+        "postcss",
+        "autoprefixer",
+        "postcss-nested",
+        "@biomejs/biome"
+      ]
+    },
+    {
+      "groupName": "TypeScript",
+      "matchPackageNames": [
+        "typescript",
+        "@types/react",
+        "@types/react-dom",
+        "@types/jsdom"
+      ]
+    },
+    {
+      "groupName": "GitHub Actions",
+      "matchManagers": ["github-actions"],
+      "pinDigests": true
+    },
+    {
+      "groupName": "Security patches",
+      "matchUpdateTypes": ["patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "groupName": "Major Dependencies",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "labels": ["dependencies", "major"]
+    },
+    {
+      "matchUpdateTypes": ["minor"],
+      "labels": ["dependencies", "minor"]
+    },
+    {
+      "matchUpdateTypes": ["patch"],
+      "labels": ["dependencies", "patch"]
     }
-  ],
-  "schedule": ["before 3am on Monday"],
-  "timezone": "Asia/Tokyo",
-  "labels": ["dependencies"],
-  "semanticCommits": "disabled",
-  "commitMessagePrefix": "chore:",
-  "prHourlyLimit": 2,
-  "prConcurrentLimit": 10
+  ]
 }
