@@ -260,6 +260,7 @@ const useDragHandlers = (
       dragStartYRef.current = e.clientY;
       mouseDownPositionRef.current = { x: e.clientX, y: e.clientY };
       element.dataset.dragging = "true";
+      document.body.style.cursor = "ns-resize";
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -277,6 +278,7 @@ const useDragHandlers = (
 
       isDraggingRef.current = false;
       delete element.dataset.dragging;
+      document.body.style.cursor = "";
 
       // Check if it was a drag or just a click
       const dragDistance = calculateDragDistance(
