@@ -1,0 +1,6 @@
+/* Global styles for react-mini-fab */
+
+/* Set cursor to ns-resize when dragging */
+body[data-react-mini-fab-dragging="true"] {
+  cursor: ns-resize;
+}

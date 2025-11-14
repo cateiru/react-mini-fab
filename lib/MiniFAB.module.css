@@ -94,7 +94,7 @@
       transform: translateX(-100%);
     }
     /* Styles while dragging */
-    &[data-dragging="true"] {
+    :global(body[data-react-mini-fab-dragging="true"]) & {
       .floating-action-button {
         padding-left: 20px;
       }
@@ -119,7 +119,7 @@
       transform: translateX(100%);
     }
     /* Styles while dragging */
-    &[data-dragging="true"] {
+    :global(body[data-react-mini-fab-dragging="true"]) & {
       .floating-action-button {
         padding-right: 20px;
       }

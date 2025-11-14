@@ -52,7 +52,7 @@ describe("Draggable", () => {
 
     fireEvent.mouseDown(element, { clientY: 150 });
 
-    expect(element.dataset.dragging).toBe("true");
+    expect(document.body.dataset.reactMiniFabDragging).toBe("true");
   });
 
   test("moves the element on mousemove event", () => {
@@ -75,11 +75,11 @@ describe("Draggable", () => {
 
     // Start dragging
     fireEvent.mouseDown(element, { clientY: 150 });
-    expect(element.dataset.dragging).toBe("true");
+    expect(document.body.dataset.reactMiniFabDragging).toBe("true");
 
     // End dragging
     fireEvent.mouseUp(document);
-    expect(element.dataset.dragging).toBeUndefined();
+    expect(document.body.dataset.reactMiniFabDragging).toBeUndefined();
   });
 
   test("ignores mousemove event when not dragging", () => {

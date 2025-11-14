@@ -259,8 +259,7 @@ const useDragHandlers = (
       initialTopRef.current = getCurrentTop(element);
       dragStartYRef.current = e.clientY;
       mouseDownPositionRef.current = { x: e.clientX, y: e.clientY };
-      element.dataset.dragging = "true";
-      document.body.style.cursor = "ns-resize";
+      document.body.dataset.reactMiniFabDragging = "true";
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -277,8 +276,7 @@ const useDragHandlers = (
       if (!isDraggingRef.current) return;
 
       isDraggingRef.current = false;
-      delete element.dataset.dragging;
-      document.body.style.cursor = "";
+      delete document.body.dataset.reactMiniFabDragging;
 
       // Check if it was a drag or just a click
       const dragDistance = calculateDragDistance(
