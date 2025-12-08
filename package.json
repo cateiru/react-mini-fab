@@ -68,7 +68,7 @@
     "@vitejs/plugin-react": "^5.0.4",
     "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.4.21",
-    "jsdom": "^27.2.0",
+    "jsdom": "^27.3.0",
     "postcss": "^8.5.6",
     "postcss-nested": "^7.0.2",
     "storybook": "9.1.13",
