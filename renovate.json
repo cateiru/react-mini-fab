@@ -16,9 +16,9 @@
   },
   "packageRules": [
     {
-      "matchPackagePatterns": ["*"],
       "rangeStrategy": "bump",
-      "minimumReleaseAge": "7 days"
+      "minimumReleaseAge": "7 days",
+      "matchPackageNames": ["*"]
     },
     {
       "groupName": "devDependencies (non-major)",
@@ -29,17 +29,16 @@
     },
     {
       "groupName": "React",
-      "matchPackageNames": ["react", "react-dom"],
-      "matchPackagePatterns": ["@types/react"],
+      "matchPackageNames": ["react", "react-dom", "/@types/react/"],
       "schedule": ["before 3am on Monday"]
     },
     {
       "groupName": "Storybook",
-      "matchPackagePatterns": ["^@storybook/", "^storybook$"]
+      "matchPackageNames": ["/^@storybook//", "/^storybook$/"]
     },
     {
       "groupName": "Testing Libraries",
-      "matchPackagePatterns": ["^@testing-library/", "^vitest", "^@vitest/"]
+      "matchPackageNames": ["/^@testing-library//", "/^vitest/", "/^@vitest//"]
     },
     {
       "groupName": "Build Tools",
