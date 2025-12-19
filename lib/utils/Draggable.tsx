@@ -103,6 +103,38 @@ export const savePositionToStorage = (draggableId: string, y: number): void => {
 };
 
 /**
+ * Normalizes pointer coordinates from MouseEvent or TouchEvent.
+ *
+ * @param e - Mouse event or touch event
+ * @returns Normalized coordinates { x: number, y: number }
+ *
+ * @remarks
+ * - For MouseEvent: returns e.clientX, e.clientY
+ * - For TouchEvent: returns coordinates of the first touch point (e.touches[0])
+ * - Uses only the first touch even in multi-touch scenarios
+ *
+ * @example
+ * ```tsx
+ * const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+ *   const coords = normalizePointerCoordinates(e);
+ *   console.log(coords); // { x: 100, y: 200 }
+ * };
+ * ```
+ *
+ * @internal - Exported for testing purposes only
+ */
+export const normalizePointerCoordinates = (
+  e: MouseEvent | TouchEvent,
+): { x: number; y: number } => {
+  if (e instanceof MouseEvent) {
+    return { x: e.clientX, y: e.clientY };
+  }
+  // TouchEvent の場合、最初のタッチのみを使用
+  const touch = e.touches[0];
+  return { x: touch.clientX, y: touch.clientY };
+};
+
+/**
  * Calculates the Euclidean distance between two points.
  *
  * @param startX - X coordinate of the starting point
@@ -249,30 +281,39 @@ const useDragHandlers = (
   const dragStartYRef = useRef(0);
   const initialTopRef = useRef(0);
   const mouseDownPositionRef = useRef({ x: 0, y: 0 });
+  const lastTouchTimeRef = useRef(0);
 
   useEffect(() => {
     const element = targetRef.current;
     if (!element) return;
 
-    const handleMouseDown = (e: MouseEvent) => {
+    // Ignore synthetic mouse events that some browsers fire shortly after touch events.
+    // 500ms is chosen to comfortably exceed the typical ~300ms delay while remaining responsive
+    // across a range of devices; adjust only if device behavior or UX requirements change.
+    const MOUSE_IGNORE_TIMEOUT = 500; // milliseconds
+
+    // 共通のドラッグ開始処理
+    const startDrag = (x: number, y: number) => {
       isDraggingRef.current = true;
       initialTopRef.current = getCurrentTop(element);
-      dragStartYRef.current = e.clientY;
-      mouseDownPositionRef.current = { x: e.clientX, y: e.clientY };
+      dragStartYRef.current = y;
+      mouseDownPositionRef.current = { x, y };
       element.dataset.dragging = "true";
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    // 共通のドラッグ移動処理
+    const moveDrag = (y: number) => {
       if (!isDraggingRef.current) return;
 
-      const deltaY = e.clientY - dragStartYRef.current;
+      const deltaY = y - dragStartYRef.current;
       const newTop = initialTopRef.current + deltaY;
       const clampedTop = clampYPosition(newTop, element);
 
       element.style.top = `${clampedTop}px`;
     };
 
-    const handleMouseUp = (e: MouseEvent) => {
+    // 共通のドラッグ終了処理
+    const endDrag = (x: number, y: number) => {
       if (!isDraggingRef.current) return;
 
       isDraggingRef.current = false;
@@ -282,8 +323,8 @@ const useDragHandlers = (
       const dragDistance = calculateDragDistance(
         mouseDownPositionRef.current.x,
         mouseDownPositionRef.current.y,
-        e.clientX,
-        e.clientY,
+        x,
+        y,
       );
       const wasDragged = dragDistance > DRAG_THRESHOLD;
 
@@ -296,14 +337,68 @@ const useDragHandlers = (
       }
     };
 
+    // マウスイベントハンドラ
+    const handleMouseDown = (e: MouseEvent) => {
+      // タッチイベント直後の場合は無視
+      if (Date.now() - lastTouchTimeRef.current < MOUSE_IGNORE_TIMEOUT) {
+        return;
+      }
+      const coords = normalizePointerCoordinates(e);
+      startDrag(coords.x, coords.y);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const coords = normalizePointerCoordinates(e);
+      moveDrag(coords.y);
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      const coords = normalizePointerCoordinates(e);
+      endDrag(coords.x, coords.y);
+    };
+
+    // タッチイベントハンドラ
+    const handleTouchStart = (e: TouchEvent) => {
+      lastTouchTimeRef.current = Date.now();
+      const coords = normalizePointerCoordinates(e);
+      startDrag(coords.x, coords.y);
+      // スクロールを防止するため、touchstartでpreventDefault()を呼ぶ
+      e.preventDefault();
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 0) return;
+      const coords = normalizePointerCoordinates(e);
+      moveDrag(coords.y);
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      // touchendではe.touchesが空なので、changedTouchesを使用
+      if (e.changedTouches.length === 0) return;
+      const touch = e.changedTouches[0];
+      endDrag(touch.clientX, touch.clientY);
+    };
+
+    // イベントリスナーの登録
     element.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
 
+    element.addEventListener("touchstart", handleTouchStart, {
+      passive: false,
+    });
+    document.addEventListener("touchmove", handleTouchMove, { passive: true });
+    document.addEventListener("touchend", handleTouchEnd, { passive: true });
+
     return () => {
+      // クリーンアップ
       element.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
+
+      element.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
     };
   }, [targetRef, draggableId, onDragStateChange]);
 };
