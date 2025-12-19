@@ -34,6 +34,12 @@ export type MiniFABProps = {
   backgroundColor: string;
 
   /**
+   * Color of the button text.
+   * @default #000000
+   */
+  color?: string;
+
+  /**
    * Position of the button on the screen.
    * @default "left"
    */
@@ -188,6 +194,7 @@ export const MiniFAB = (props: MiniFABProps) => {
 
   const cssVariables = {
     "--background-color": props.backgroundColor,
+    "--color": props.color ?? "#000000",
     "--focus-outline-color": props.backgroundColor,
     "--badge-color": props.badge?.color,
   } as React.CSSProperties;

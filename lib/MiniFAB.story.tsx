@@ -125,8 +125,9 @@ export const TextLeft: Story = {
     ariaLabel: "MiniFAB",
     title: "Floating Action Button",
     backgroundColor: "green",
+    color: "#ffffff",
     draggableId: "fab-4",
-    children: <p style={{ color: "#fff" }}>Text Hello World</p>,
+    children: "Text Hello World",
   },
 };
 
@@ -156,9 +157,10 @@ export const BadgeWithText: Story = {
     ariaLabel: "MiniFAB",
     title: "Floating Action Button",
     backgroundColor: "#b02883",
+    color: "#ffffff",
     position: "left",
     draggableId: "fab-5",
     badge: { color: "#4a26ff" },
-    children: <p style={{ color: "#fff" }}>Text Hello World</p>,
+    children: "Text Hello World",
   },
 };

@@ -22,6 +22,7 @@
     /* Button child element styles */
     .floating-action-button-icon {
       pointer-events: none;
+      color: var(--color);
 
       /* Center align images */
       img,
