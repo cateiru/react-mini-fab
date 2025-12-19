@@ -7,6 +7,7 @@ import {
   Draggable,
   getCurrentTop,
   loadPositionFromStorage,
+  normalizePointerCoordinates,
   savePositionToStorage,
 } from "./Draggable";
 
@@ -662,5 +663,323 @@ describe("Utility Functions", () => {
       const parsed = JSON.parse(saved as string);
       expect(parsed.y).toBeCloseTo(123.45, 2);
     });
+  });
+
+  describe("normalizePointerCoordinates", () => {
+    test("returns clientX and clientY for MouseEvent", () => {
+      const mouseEvent = new MouseEvent("mousedown", {
+        clientX: 100,
+        clientY: 200,
+      });
+
+      const coords = normalizePointerCoordinates(mouseEvent);
+      expect(coords).toEqual({ x: 100, y: 200 });
+    });
+
+    test("returns first touch coordinates for TouchEvent", () => {
+      const touch = { clientX: 150, clientY: 250 } as Touch;
+      const touchEvent = new TouchEvent("touchstart", {
+        touches: [touch],
+      });
+
+      const coords = normalizePointerCoordinates(touchEvent);
+      expect(coords).toEqual({ x: 150, y: 250 });
+    });
+
+    test("returns first touch even with multiple touches", () => {
+      const touch1 = { clientX: 150, clientY: 250 } as Touch;
+      const touch2 = { clientX: 300, clientY: 400 } as Touch;
+      const touchEvent = new TouchEvent("touchstart", {
+        touches: [touch1, touch2],
+      });
+
+      const coords = normalizePointerCoordinates(touchEvent);
+      expect(coords).toEqual({ x: 150, y: 250 });
+    });
+  });
+});
+
+describe("Draggable with Touch Events", () => {
+  test("starts dragging on touchstart event", () => {
+    const { getByTestId } = render(<DraggableWrapper />);
+    const element = getByTestId("draggable-element");
+
+    const touch = { clientX: 100, clientY: 150 } as Touch;
+    fireEvent.touchStart(element, {
+      touches: [touch],
+    });
+
+    expect(element.dataset.dragging).toBe("true");
+  });
+
+  test("moves the element on touchmove event", () => {
+    const { getByTestId } = render(<DraggableWrapper />);
+    const element = getByTestId("draggable-element");
+
+    // Start touch
+    const touch1 = { clientX: 100, clientY: 150 } as Touch;
+    fireEvent.touchStart(element, {
+      touches: [touch1],
+    });
+
+    // Move touch 50px down
+    const touch2 = { clientX: 100, clientY: 200 } as Touch;
+    fireEvent.touchMove(document, {
+      touches: [touch2],
+    });
+
+    // Expect top to be 150px (100px + 50px)
+    expect(element.style.top).toBe("150px");
+  });
+
+  test("stops dragging on touchend event", () => {
+    const { getByTestId } = render(<DraggableWrapper />);
+    const element = getByTestId("draggable-element");
+
+    // Start touch
+    const touch1 = { clientX: 100, clientY: 150 } as Touch;
+    fireEvent.touchStart(element, {
+      touches: [touch1],
+    });
+    expect(element.dataset.dragging).toBe("true");
+
+    // End touch
+    const touch2 = { clientX: 100, clientY: 150 } as Touch;
+    fireEvent.touchEnd(document, {
+      changedTouches: [touch2],
+    });
+    expect(element.dataset.dragging).toBeUndefined();
+  });
+
+  test("uses only the first touch in multi-touch scenario", () => {
+    const { getByTestId } = render(<DraggableWrapper />);
+    const element = getByTestId("draggable-element");
+
+    // Start with multiple touches
+    const touch1 = { clientX: 100, clientY: 150 } as Touch;
+    const touch2 = { clientX: 200, clientY: 250 } as Touch;
+    fireEvent.touchStart(element, {
+      touches: [touch1, touch2],
+    });
+
+    // Move with multiple touches (first finger moves 50px down)
+    const touch3 = { clientX: 100, clientY: 200 } as Touch;
+    const touch4 = { clientX: 200, clientY: 300 } as Touch;
+    fireEvent.touchMove(document, {
+      touches: [touch3, touch4],
+    });
+
+    // 最初の指の動きのみが適用される
+    expect(element.style.top).toBe("150px");
+  });
+
+  test("ignores mouse events shortly after touch events", () => {
+    const { getByTestId } = render(<DraggableWrapper />);
+    const element = getByTestId("draggable-element");
+
+    // Touch event
+    const touch = { clientX: 100, clientY: 150 } as Touch;
+    fireEvent.touchStart(element, {
+      touches: [touch],
+    });
+    fireEvent.touchEnd(document, {
+      changedTouches: [touch],
+    });
+
+    // Immediately after, mouse event should be ignored
+    fireEvent.mouseDown(element, { clientY: 150 });
+    expect(element.dataset.dragging).toBeUndefined();
+  });
+
+  test("handles movement in negative direction with touch", () => {
+    const { getByTestId } = render(<DraggableWrapper />);
+    const element = getByTestId("draggable-element");
+
+    // Start touch
+    const touch1 = { clientX: 100, clientY: 150 } as Touch;
+    fireEvent.touchStart(element, {
+      touches: [touch1],
+    });
+
+    // Move touch 30px up
+    const touch2 = { clientX: 100, clientY: 120 } as Touch;
+    fireEvent.touchMove(document, {
+      touches: [touch2],
+    });
+
+    // Expect top to be 70px (100px - 30px)
+    expect(element.style.top).toBe("70px");
+  });
+});
+
+describe("Draggable with Touch Events and LocalStorage", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  const DraggableWrapperWithId = ({
+    draggableId,
+  }: {
+    draggableId?: string;
+  }) => {
+    const targetRef = useRef<HTMLDivElement>(null);
+
+    return (
+      <div>
+        <div
+          ref={targetRef}
+          data-testid="draggable-element"
+          style={{
+            position: "absolute",
+            top: "100px",
+            left: "50px",
+            width: "100px",
+            height: "100px",
+          }}
+        >
+          Drag me
+        </div>
+        <Draggable targetRef={targetRef} draggableId={draggableId} />
+      </div>
+    );
+  };
+
+  test("saves position to LocalStorage when dragging with touch", () => {
+    const { getByTestId } = render(
+      <DraggableWrapperWithId draggableId="test-touch-draggable" />,
+    );
+    const element = getByTestId("draggable-element");
+
+    // Touch drag
+    const touch1 = { clientX: 100, clientY: 150 } as Touch;
+    fireEvent.touchStart(element, {
+      touches: [touch1],
+    });
+
+    const touch2 = { clientX: 100, clientY: 200 } as Touch;
+    fireEvent.touchMove(document, {
+      touches: [touch2],
+    });
+
+    const touch3 = { clientX: 100, clientY: 200 } as Touch;
+    fireEvent.touchEnd(document, {
+      changedTouches: [touch3],
+    });
+
+    // Verify saved to LocalStorage
+    const savedPosition = localStorage.getItem(
+      "draggable-position-test-touch-draggable",
+    );
+    expect(savedPosition).toBeTruthy();
+
+    const parsed = JSON.parse(savedPosition as string);
+    expect(parsed.y).toBe(150);
+  });
+});
+
+describe("Draggable with Touch Events and onDragStateChange", () => {
+  const DraggableWrapperWithCallback = ({
+    onDragStateChange,
+  }: {
+    onDragStateChange?: (wasDragged: boolean) => void;
+  }) => {
+    const targetRef = useRef<HTMLDivElement>(null);
+
+    return (
+      <div>
+        <div
+          ref={targetRef}
+          data-testid="draggable-element"
+          style={{
+            position: "absolute",
+            top: "100px",
+            left: "50px",
+            width: "100px",
+            height: "100px",
+          }}
+        >
+          Drag me
+        </div>
+        <Draggable
+          targetRef={targetRef}
+          onDragStateChange={onDragStateChange}
+        />
+      </div>
+    );
+  };
+
+  test("calls onDragStateChange with true when touch dragged beyond threshold", () => {
+    const mockCallback = vi.fn();
+    const { getByTestId } = render(
+      <DraggableWrapperWithCallback onDragStateChange={mockCallback} />,
+    );
+    const element = getByTestId("draggable-element");
+
+    // Touch drag more than 5px
+    const touch1 = { clientX: 100, clientY: 150 } as Touch;
+    fireEvent.touchStart(element, {
+      touches: [touch1],
+    });
+
+    const touch2 = { clientX: 100, clientY: 200 } as Touch;
+    fireEvent.touchMove(document, {
+      touches: [touch2],
+    });
+
+    const touch3 = { clientX: 100, clientY: 200 } as Touch;
+    fireEvent.touchEnd(document, {
+      changedTouches: [touch3],
+    });
+
+    expect(mockCallback).toHaveBeenCalledWith(true);
+  });
+
+  test("calls onDragStateChange with false when touch is a tap (not dragged)", () => {
+    const mockCallback = vi.fn();
+    const { getByTestId } = render(
+      <DraggableWrapperWithCallback onDragStateChange={mockCallback} />,
+    );
+    const element = getByTestId("draggable-element");
+
+    // Tap without dragging
+    const touch = { clientX: 100, clientY: 150 } as Touch;
+    fireEvent.touchStart(element, {
+      touches: [touch],
+    });
+    fireEvent.touchEnd(document, {
+      changedTouches: [touch],
+    });
+
+    expect(mockCallback).toHaveBeenCalledWith(false);
+  });
+
+  test("calls onDragStateChange with false when touch drag is less than threshold", () => {
+    const mockCallback = vi.fn();
+    const { getByTestId } = render(
+      <DraggableWrapperWithCallback onDragStateChange={mockCallback} />,
+    );
+    const element = getByTestId("draggable-element");
+
+    // Touch drag less than 5px
+    const touch1 = { clientX: 100, clientY: 150 } as Touch;
+    fireEvent.touchStart(element, {
+      touches: [touch1],
+    });
+
+    const touch2 = { clientX: 102, clientY: 152 } as Touch;
+    fireEvent.touchMove(document, {
+      touches: [touch2],
+    });
+
+    const touch3 = { clientX: 102, clientY: 152 } as Touch;
+    fireEvent.touchEnd(document, {
+      changedTouches: [touch3],
+    });
+
+    expect(mockCallback).toHaveBeenCalledWith(false);
   });
 });

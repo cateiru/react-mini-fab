@@ -9,6 +9,7 @@ A lightweight and customizable Mini Floating Action Button (Mini FAB) component 
 ## Features
 
 - **Draggable** - Vertically draggable with position persistence via localStorage
+- **Touch Support** - Full touch event support for mobile devices with scroll prevention during drag
 - **Smooth Animations** - Elegant show/hide animations and position transitions
 - **Flexible Positioning** - Support for left and right screen positions with animated switching
 - **Badge Support** - Optional badge indicator for notifications or status
