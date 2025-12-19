@@ -94,6 +94,7 @@ function App() {
 | `title` | `string` | No | - | Tooltip text displayed when hovering over the button |
 | `ariaLabel` | `string` | **Yes** | - | Accessibility label for screen readers |
 | `backgroundColor` | `string` | **Yes** | - | Background color of the button (any valid CSS color) |
+| `color` | `string` | No | `#000000` | Color of the button text/icon (any valid CSS color) |
 | `position` | `"left" \| "right"` | No | `"left"` | Position of the button on the screen |
 | `draggableId` | `string` | No | - | Unique identifier for the draggable functionality. When provided, the vertical position is saved to localStorage |
 | `badge` | `Badge` | No | - | Badge configuration to display on the button |
