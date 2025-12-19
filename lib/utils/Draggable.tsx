@@ -359,14 +359,11 @@ const useDragHandlers = (
       lastTouchTimeRef.current = Date.now();
       const coords = normalizePointerCoordinates(e);
       startDrag(coords.x, coords.y);
+      // スクロールを防止するため、touchstartでpreventDefault()を呼ぶ
+      e.preventDefault();
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      // ドラッグ中のみpreventDefault()を呼ぶ
-      if (isDraggingRef.current) {
-        e.preventDefault();
-      }
-
       if (e.touches.length === 0) return;
       const coords = normalizePointerCoordinates(e);
       moveDrag(coords.y);
@@ -384,8 +381,10 @@ const useDragHandlers = (
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
 
-    element.addEventListener("touchstart", handleTouchStart, { passive: true });
-    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    element.addEventListener("touchstart", handleTouchStart, {
+      passive: false,
+    });
+    document.addEventListener("touchmove", handleTouchMove, { passive: true });
     document.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     return () => {
