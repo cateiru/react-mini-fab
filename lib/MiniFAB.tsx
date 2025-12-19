@@ -227,6 +227,8 @@ export const MiniFAB = (props: MiniFABProps) => {
       <button
         title={props.title}
         aria-label={props.ariaLabel}
+        disabled={isHide}
+        aria-disabled={isHide}
         onClick={() => {
           // if hidden, do nothing
           if (isHide) return;
