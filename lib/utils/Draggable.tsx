@@ -287,7 +287,10 @@ const useDragHandlers = (
     const element = targetRef.current;
     if (!element) return;
 
-    const MOUSE_IGNORE_TIMEOUT = 500; // ms
+    // Ignore synthetic mouse events that some browsers fire shortly after touch events.
+    // 500ms is chosen to comfortably exceed the typical ~300ms delay while remaining responsive
+    // across a range of devices; adjust only if device behavior or UX requirements change.
+    const MOUSE_IGNORE_TIMEOUT = 500; // milliseconds
 
     // 共通のドラッグ開始処理
     const startDrag = (x: number, y: number) => {
