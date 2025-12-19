@@ -1,7 +1,7 @@
 {
   "name": "react-mini-fab",
   "description": "A lightweight and customizable Mini Floating Action Button (Mini FAB) component for React applications. This component provides an easy way to add a floating action button to your UI, enhancing user interaction and accessibility.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "type": "module",
   "keywords": [
     "react",
@@ -45,7 +45,8 @@
     "check:write": "biome check --write .",
     "test": "vitest run",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "publish": "pnpm run build && pnpm publish"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
