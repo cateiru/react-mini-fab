@@ -1,45 +1,72 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "schedule": ["before 3am on Monday"],
+  "extends": [
+    "config:recommended"
+  ],
+  "schedule": [
+    "before 3am on Monday"
+  ],
   "timezone": "Asia/Tokyo",
-  "labels": ["dependencies"],
+  "labels": [
+    "dependencies"
+  ],
   "semanticCommits": "disabled",
   "commitMessagePrefix": "chore:",
   "prHourlyLimit": 2,
   "prConcurrentLimit": 10,
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["before 3am on Monday"],
+    "schedule": [
+      "before 3am on Monday"
+    ],
     "automerge": true,
     "automergeType": "pr"
   },
   "packageRules": [
     {
-      "matchPackagePatterns": ["*"],
       "rangeStrategy": "bump",
-      "minimumReleaseAge": "7 days"
+      "minimumReleaseAge": "7 days",
+      "matchPackageNames": [
+        "*"
+      ]
     },
     {
       "groupName": "devDependencies (non-major)",
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "automerge": true,
       "automergeType": "pr"
     },
     {
       "groupName": "React",
-      "matchPackageNames": ["react", "react-dom"],
-      "matchPackagePatterns": ["@types/react"],
-      "schedule": ["before 3am on Monday"]
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "/@types/react/"
+      ],
+      "schedule": [
+        "before 3am on Monday"
+      ]
     },
     {
       "groupName": "Storybook",
-      "matchPackagePatterns": ["^@storybook/", "^storybook$"]
+      "matchPackageNames": [
+        "/^@storybook//",
+        "/^storybook$/"
+      ]
     },
     {
       "groupName": "Testing Libraries",
-      "matchPackagePatterns": ["^@testing-library/", "^vitest", "^@vitest/"]
+      "matchPackageNames": [
+        "/^@testing-library//",
+        "/^vitest/",
+        "/^@vitest//"
+      ]
     },
     {
       "groupName": "Build Tools",
@@ -64,32 +91,53 @@
     },
     {
       "groupName": "GitHub Actions",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "pinDigests": true
     },
     {
       "groupName": "Security patches",
-      "matchUpdateTypes": ["patch"],
+      "matchUpdateTypes": [
+        "patch"
+      ],
       "matchCurrentVersion": "!/^0/",
       "automerge": true,
       "automergeType": "pr"
     },
     {
       "groupName": "Major Dependencies",
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "automerge": false
     },
     {
-      "matchUpdateTypes": ["major"],
-      "labels": ["dependencies", "major"]
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "dependencies",
+        "major"
+      ]
     },
     {
-      "matchUpdateTypes": ["minor"],
-      "labels": ["dependencies", "minor"]
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "labels": [
+        "dependencies",
+        "minor"
+      ]
     },
     {
-      "matchUpdateTypes": ["patch"],
-      "labels": ["dependencies", "patch"]
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "labels": [
+        "dependencies",
+        "patch"
+      ]
     }
   ]
 }
