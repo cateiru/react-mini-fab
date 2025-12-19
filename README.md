@@ -89,10 +89,11 @@ function App() {
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `onClick` | `() => void` | No | - | Callback function invoked when the button is clicked |
-| `isHide` | `boolean` | No | `false` | Controls the visibility of the button. When `true`, the button is hidden |
+| `isHide` | `boolean` | No | `false` | Controls the visibility of the button. When `true`, the button is hidden and automatically receives `disabled` and `aria-disabled` attributes for improved accessibility |
 | `title` | `string` | No | - | Tooltip text displayed when hovering over the button |
 | `ariaLabel` | `string` | **Yes** | - | Accessibility label for screen readers |
 | `backgroundColor` | `string` | **Yes** | - | Background color of the button (any valid CSS color) |
+| `color` | `string` | No | `"#000000"` | Color of the button text |
 | `position` | `"left" \| "right"` | No | `"left"` | Position of the button on the screen |
 | `draggableId` | `string` | No | - | Unique identifier for the draggable functionality. When provided, the vertical position is saved to localStorage |
 | `badge` | `Badge` | No | - | Badge configuration to display on the button |
@@ -188,7 +189,8 @@ function App() {
 This component is built with accessibility in mind:
 
 - **ARIA Labels**: The `ariaLabel` prop is required to ensure screen readers can properly identify the button's purpose
-- **Keyboard Navigation**: The FAB is fully keyboard accessible using standard button interactions
+- **Keyboard Navigation**: The FAB is fully keyboard accessible using standard button interactions. When `isHide` is `true`, the button is automatically excluded from keyboard tab navigation
+- **Disabled State Support**: When hidden (`isHide={true}`), the button receives both `disabled` and `aria-disabled` attributes, ensuring proper accessibility for screen readers and keyboard users
 - **Focus Indicators**: Clear focus outlines for keyboard navigation
 - **Semantic HTML**: Uses proper `<button>` element for interactive functionality
 - **Tooltip Support**: Optional `title` prop provides additional context on hover
