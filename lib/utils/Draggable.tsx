@@ -368,12 +368,24 @@ const useDragHandlers = (
 
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length === 0) return;
+      if (!isDraggingRef.current) return;
+
       const coords = normalizePointerCoordinates(e);
-      moveDrag(coords.y);
-      // Prevent scrolling only when dragging
-      if (isDraggingRef.current) {
-        e.preventDefault();
+
+      // 移動距離を計算して閾値チェック
+      const dragDistance = calculateDragDistance(
+        mouseDownPositionRef.current.x,
+        mouseDownPositionRef.current.y,
+        coords.x,
+        coords.y,
+      );
+
+      // 閾値を超えた場合のみドラッグとして処理
+      if (dragDistance > DRAG_THRESHOLD) {
+        moveDrag(coords.y);
+        e.preventDefault(); // スクロールを防止
       }
+      // 閾値以下の場合は何もしない（スクロールが有効のまま）
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
