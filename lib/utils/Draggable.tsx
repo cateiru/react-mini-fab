@@ -362,14 +362,18 @@ const useDragHandlers = (
       lastTouchTimeRef.current = Date.now();
       const coords = normalizePointerCoordinates(e);
       startDrag(coords.x, coords.y);
-      // スクロールを防止するため、touchstartでpreventDefault()を呼ぶ
-      e.preventDefault();
+      // Note: preventDefault() is not called here to allow click events to fire.
+      // Scrolling is prevented in handleTouchMove instead.
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length === 0) return;
       const coords = normalizePointerCoordinates(e);
       moveDrag(coords.y);
+      // Prevent scrolling only when dragging
+      if (isDraggingRef.current) {
+        e.preventDefault();
+      }
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
@@ -385,9 +389,9 @@ const useDragHandlers = (
     document.addEventListener("mouseup", handleMouseUp);
 
     element.addEventListener("touchstart", handleTouchStart, {
-      passive: false,
+      passive: true,
     });
-    document.addEventListener("touchmove", handleTouchMove, { passive: true });
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
     document.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     return () => {
