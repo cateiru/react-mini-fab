@@ -53,9 +53,9 @@
     "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "@biomejs/biome": "^2.4.10",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "@biomejs/biome": "^2.4.11",
     "@storybook/addon-docs": "^9.1.20",
     "@storybook/addon-essentials": "9.0.0-alpha.12",
     "@storybook/addon-links": "9.1.20",
@@ -70,11 +70,11 @@
     "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.4.27",
     "jsdom": "^27.4.0",
-    "postcss": "^8.5.8",
+    "postcss": "^8.5.9",
     "postcss-nested": "^7.0.2",
     "storybook": "9.1.20",
     "typescript": "~5.9.3",
-    "vite": "^7.3.1",
+    "vite": "^7.3.2",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.4"
   }
