@@ -9,7 +9,7 @@ importers:
   .:
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.4.12
+        specifier: ^2.4.13
         version: 2.4.13
       '@storybook/addon-docs':
         specifier: ^9.1.20
@@ -54,7 +54,7 @@ importers:
         specifier: ^27.4.0
         version: 27.4.0
       postcss:
-        specifier: ^8.5.10
+        specifier: ^8.5.12
         version: 8.5.12
       postcss-nested:
         specifier: ^7.0.2
