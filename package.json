@@ -55,7 +55,7 @@
   "devDependencies": {
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "@biomejs/biome": "^2.4.13",
+    "@biomejs/biome": "^2.4.14",
     "@storybook/addon-docs": "^9.1.20",
     "@storybook/addon-essentials": "9.0.0-alpha.12",
     "@storybook/addon-links": "9.1.20",
@@ -70,7 +70,7 @@
     "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.5.0",
     "jsdom": "^27.4.0",
-    "postcss": "^8.5.12",
+    "postcss": "^8.5.13",
     "postcss-nested": "^7.0.2",
     "storybook": "9.1.20",
     "typescript": "~5.9.3",
