@@ -36,7 +36,7 @@ importers:
         specifier: ^27.0.0
         version: 27.0.0
       '@types/react':
-        specifier: ^19.2.14
+        specifier: ^19.2.15
         version: 19.2.15
       '@types/react-dom':
         specifier: ^19.2.3
@@ -54,7 +54,7 @@ importers:
         specifier: ^27.4.0
         version: 27.4.0
       postcss:
-        specifier: ^8.5.14
+        specifier: ^8.5.15
         version: 8.5.15
       postcss-nested:
         specifier: ^7.0.2
