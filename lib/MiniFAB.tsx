@@ -117,10 +117,10 @@ export const MiniFAB = (props: MiniFABProps) => {
     props.position,
   );
   const [wasDragged, setWasDragged] = useState(false);
-  const dragResetTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const dragResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const timers: NodeJS.Timeout[] = [];
+    const timers: ReturnType<typeof setTimeout>[] = [];
 
     // initial animation
     if (initializeHide) {
